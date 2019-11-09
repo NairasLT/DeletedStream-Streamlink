@@ -31,21 +31,17 @@ namespace Live
             Console.Clear();
             Console.WriteLine("streamlink must be installed, upload to youtube if failled dosen't upload, the live.exe\nmust be in the same folder with the GoogleApi Dlls\nNeed to manually then, commands: none"); // REIK PAKEIST TRY UPLOAD EVERY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             conf.configRead();
-            string input = Console.ReadLine();
 
 
 
+            while (true)
+            {
+                Console.ReadLine();
+            }
 
-            Console.ReadLine();
-            Console.ReadLine();
-            Console.ReadLine();
-            Console.ReadLine();
-            Console.ReadLine();
-            Console.ReadLine();
-            Console.ReadLine();
-            Console.ReadLine();
 
         }
+
 
 
 

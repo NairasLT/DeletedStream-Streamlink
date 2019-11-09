@@ -23,10 +23,6 @@ using System.Threading.Tasks;
         public async Task check(string ChannelURL)
         {
 
-        new Thread(() =>
-        {
-            Thread.CurrentThread.IsBackground = true;
-
         Console.WriteLine(string.Format("Started Thread For Channel URL: {0}", ChannelURL));
         // EXECUTINA COMMAND LINE, VISADA KEICIASIA FILENAME VALUE I DABARTINE DATA
 
@@ -70,13 +66,8 @@ using System.Threading.Tasks;
                 }
 
 
-
-
                 Console.WriteLine("CREATED THREAD, RETURNING TO CHECKING");
             }
-
-
-        }).Start();
 
       }
 
