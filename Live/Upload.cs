@@ -61,7 +61,7 @@ using Google.Apis.YouTube.v3.Data;
         }
         catch (Exception)
         {
-            log.WriteLine("Execption #1 wow congrats");
+            Console.WriteLine("Execption #1 wow congrats");
         }
     }
 
@@ -70,18 +70,18 @@ using Google.Apis.YouTube.v3.Data;
             switch (progress.Status)
             {
                 case UploadStatus.Uploading:
-                log.WriteLine(string.Format("{0} bytes sent.", progress.BytesSent));
+                Console.WriteLine(string.Format("{0} bytes sent.", progress.BytesSent));
                     break;
 
                 case UploadStatus.Failed:
-                    log.WriteLine(string.Format(" -------->  An error prevented the upload from completing.\n{0}", progress.Exception));
+                Console.WriteLine(string.Format(" -------->  An error prevented the upload from completing.\n{0}", progress.Exception));
                 break;
             }
         }
 
         public void videosInsertRequest_ResponseReceived(Video video)
         {
-        log.WriteLine(string.Format("Video id '{0}' was successfully uploaded.", video.Id));
+        Console.WriteLine(string.Format("Video id '{0}' was successfully uploaded.", video.Id));
     }
 
 

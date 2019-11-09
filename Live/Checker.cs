@@ -23,7 +23,7 @@ using System.Threading.Tasks;
         public async Task check(string ChannelURL)
         {
 
-        log.WriteLine(string.Format("Started Thread For Channel URL: {0}", ChannelURL));
+        Console.WriteLine(string.Format("Started Thread For Channel URL: {0}", ChannelURL));
         // EXECUTINA COMMAND LINE, VISADA KEICIASIA FILENAME VALUE I DABARTINE DATA
 
         filename = DateTime.Now.ToString() + "";
@@ -41,11 +41,9 @@ using System.Threading.Tasks;
         cmd.StandardInput.Flush();
         cmd.StandardInput.Close();
         message = cmd.StandardOutput.ReadToEnd();
-        log.Log(message);
         if (message.Contains("error"))
             {
-            log.WriteLine("STREAM OFFLINE FOR URL: " + ChannelURL); // NERANDA RETURININA
-            log.WriteLine(message);
+            Console.WriteLine("STREAM OFFLINE FOR URL: " + ChannelURL); // NERANDA RETURININA
             }
 
         if (message.Contains("Stream ended") && message.Contains(ChannelURL)) // PASIBAIGE VISI STREAMAI SU /LIVE TAGU BAIGIASI PO 5 MIN!

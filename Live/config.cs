@@ -55,7 +55,7 @@ namespace Live
             string[] ints = new string[lineCount + 1]; // Nes esa 0 based jai bus error patikrink!! <---
             for (var i = 1; i <= lineCount; i++)
             {
-                Console.WriteLine(string.Format("Please enter The '{0}' URL Interval in MILLISECONDS to Check", i)); // REIK PAKEIST PASKUI KAD RODYTU URL!
+                Console.WriteLine(string.Format("Please enter The '{0}' URL Interval in MILLISECONDS to Check", i)); // REIK PAKEIST PASKUI KAD RODYTU URL! NE NEREIK KOLKAS
                 ints[i] = Console.ReadLine();
             }
             using (StreamWriter sw = File.CreateText(log.INTpath))

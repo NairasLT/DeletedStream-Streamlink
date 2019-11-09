@@ -13,24 +13,6 @@ namespace Live
         public string URLpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\configURL.txt";
         public string INTpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\configINTERVAL.txt";
 
-        public void WriteLine(string Actual) // SHIT LOGGING I KNOW
-        {
-            Console.WriteLine(Actual);
-
-
-            using (StreamWriter file = new StreamWriter("liveLog.txt", true))
-            {
-                file.WriteLine(Actual);
-            }
-        }
-        public void Log(string Actual) // SHIT LOGGING I KNOW
-        {
-
-            using (StreamWriter file = new StreamWriter("liveLog.txt", true))
-            {
-                file.WriteLine(Actual);
-            }
-        }
 
         public void Uploader(string filename)
         {

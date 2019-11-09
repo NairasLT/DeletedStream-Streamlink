@@ -1,0 +1,171 @@
+Started Thread For Channel URL: https://www.youtube.com/channel/UCwqK7zPF6z0sr1wrev9W-Tw/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-14-37_PM.mp4 https://www.youtube.com/channel/UCwqK7zPF6z0sr1wrev9W-Tw/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UCwqK7zPF6z0sr1wrev9W-Tw/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UCwqK7zPF6z0sr1wrev9W-Tw/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+STREAM OFFLINE FOR URL: https://www.youtube.com/channel/UCwqK7zPF6z0sr1wrev9W-Tw/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-14-37_PM.mp4 https://www.youtube.com/channel/UCwqK7zPF6z0sr1wrev9W-Tw/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UCwqK7zPF6z0sr1wrev9W-Tw/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UCwqK7zPF6z0sr1wrev9W-Tw/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-16-11_PM.mp4 https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+STREAM OFFLINE FOR URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-16-11_PM.mp4 https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-16-16_PM.mp4 https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 best
+[cli][info] Found matching plugin hls for URL https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+error: Unable to open URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 (400 Client Error: Bad Request for url: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8)
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+STREAM OFFLINE FOR URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-16-16_PM.mp4 https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 best
+[cli][info] Found matching plugin hls for URL https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+error: Unable to open URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 (400 Client Error: Bad Request for url: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8)
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-16-33_PM.mp4 https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+STREAM OFFLINE FOR URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+Started Thread For Channel URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-16-38_PM.mp4 https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 best
+[cli][info] Found matching plugin hls for URL https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+error: Unable to open URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 (400 Client Error: Bad Request for url: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8)
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+STREAM OFFLINE FOR URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+Started Thread For Channel URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-17-15_PM.mp4 https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-17-20_PM.mp4 https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 best
+[cli][info] Found matching plugin hls for URL https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+error: Unable to open URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 (400 Client Error: Bad Request for url: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8)
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+Started Thread For Channel URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-17-25_PM.mp4 https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-17-26_PM.mp4 https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 best
+[cli][info] Found matching plugin hls for URL https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+error: Unable to open URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 (400 Client Error: Bad Request for url: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8)
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-17-28_PM.mp4 https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-17-58_PM.mp4 https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-18-57_PM.mp4 https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-19-23_PM.mp4 https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-20-27_PM.mp4 https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 best
+[cli][info] Found matching plugin hls for URL https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8
+error: Unable to open URL: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8 (400 Client Error: Bad Request for url: https://live.prd.dlive.tv/hls/live/rajonokunigas.m3u8)
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-20-27_PM.mp4 https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UCYp1zAxbn0iA-uQ2Hw5Dffg/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Microsoft Windows [Version 10.0.18362.418]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>streamlink --hls-live-restart --hls-timeout 1800 -o 11-9-2019_8-20-27_PM.mp4 https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live best
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+error: No playable streams found on this URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
+
+C:\Users\Nojus\Documents\GitHub\Checking-Downloading-Uploading-Livestream_using_streamlink\Live\bin\Debug>
+Started Thread For Channel URL: https://www.youtube.com/channel/UC9VTa-z61HlJMjbsNDynJvQ/live
