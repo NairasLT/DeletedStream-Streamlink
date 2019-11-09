@@ -29,7 +29,19 @@ namespace Live
         {
             conf.configURL();
             Console.Clear();
-            Console.WriteLine("streamlink must be installed, upload to youtube if failled dosen't upload, the live.exe\nmust be in the same folder with the GoogleApi Dlls\nNeed to manually then, commands: none\nTo upload video to youtube create oAuth2 credentials download them .json i c: \n pvz C:\\client_secrets.json YOUTUBE URL MUST BE IN FORMAT 'https://www.youtube.com/channel/MYYOUTUBECHANNELURLHERE/live' <-- /LIVE IS REALLY IMPORTANT!\nThe streamlink Timeout is 30 minutes to avoid uploading the same stream in parts, if stream went offline for 1 min. "); // REIK PAKEIST TRY UPLOAD EVERY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("<-------------->\n");
+            Console.WriteLine("1. Streamlink Timeout 30 minutes to prevent uploading in parts if stream went offline for a minute");
+            Console.WriteLine("2. If You want to check a youtube channel you MUST follow this format \n   https://www.youtube.com/channel/thechannelnamehere/live <-- live tag is very important!\n");
+            Console.WriteLine("3. Auto uploading is Enabled the Google Api files should be in the same folder as the live.exe\n");
+            Console.WriteLine("4. To auto upload to Youtube get client_secrets.json and move it to 'c:\\client_secrets.json'\n   the first upload will ask to choose the channel to upload to, make sure Chrome isn't open when the channel to upload is not chosen\n");
+            Console.WriteLine("5. To get cleint_secrets.json go to http://console.developers.google.com/ \n   create a project -> create crendentials -> Oauth2 -> download json rename it to 'client_secrets.json'\n   or just google it how to.\n");
+            Console.WriteLine("6. NOTE: if you are auto-uploading to youtube there is a QUOTA limit 2-5 videos every day.\n   NOTE: Make sure to update from GitHub:\n   https://github.com/NairasLT/Checking-Downloading-Uploading-Livestream_using_streamlink");
+            Console.WriteLine("                                  Version: 1.1");
+            Console.WriteLine("<-------------->\n");
+            Console.ResetColor();
+            Console.WriteLine("Press Enter to Start Checking.");
+            Console.ReadLine();
             conf.configRead();
 
 

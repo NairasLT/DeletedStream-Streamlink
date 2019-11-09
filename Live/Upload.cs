@@ -42,7 +42,7 @@ using Google.Apis.YouTube.v3.Data;
             var video = new Video();
             video.Snippet = new VideoSnippet();
             video.Snippet.Title = DateTime.Now.ToString();
-            video.Snippet.Description = "AUTO UPLOADED C#";
+            video.Snippet.Description = "Ikelta Automatiskai.\nhttps://github.com/NairasLT/Checking-Downloading-Uploading-Livestream_using_streamlink";
             video.Snippet.Tags = new string[] { "auto", "upload" };
             video.Snippet.CategoryId = "22"; // See https://developers.google.com/youtube/v3/docs/videoCategories/list
             video.Status = new VideoStatus();
