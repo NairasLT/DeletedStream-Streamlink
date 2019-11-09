@@ -23,6 +23,14 @@ namespace Live
                 file.WriteLine(Actual);
             }
         }
+        public void Log(string Actual) // SHIT LOGGING I KNOW
+        {
+
+            using (StreamWriter file = new StreamWriter("liveLog.txt", true))
+            {
+                file.WriteLine(Actual);
+            }
+        }
 
         public void Uploader(string filename)
         {

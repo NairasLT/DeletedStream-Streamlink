@@ -29,7 +29,7 @@ namespace Live
         {
             conf.configURL();
             Console.Clear();
-            Console.WriteLine("streamlink must be installed, upload to youtube if failled dosen't upload, the live.exe\nmust be in the same folder with the GoogleApi Dlls\nNeed to manually then, commands: none\nTo upload video to youtube create oAuth2 credentials download them .json i c: \n pvz C:\\client_secrets.json"); // REIK PAKEIST TRY UPLOAD EVERY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            Console.WriteLine("streamlink must be installed, upload to youtube if failled dosen't upload, the live.exe\nmust be in the same folder with the GoogleApi Dlls\nNeed to manually then, commands: none\nTo upload video to youtube create oAuth2 credentials download them .json i c: \n pvz C:\\client_secrets.json YOUTUBE URL MUST BE IN FORMAT 'https://www.youtube.com/channel/MYYOUTUBECHANNELURLHERE/live' <-- /LIVE IS REALLY IMPORTANT!\nThe streamlink Timeout is 30 minutes to avoid uploading the same stream in parts, if stream went offline for 1 min. "); // REIK PAKEIST TRY UPLOAD EVERY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             conf.configRead();
 
 
