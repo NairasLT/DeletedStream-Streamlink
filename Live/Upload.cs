@@ -59,9 +59,9 @@ using Google.Apis.YouTube.v3.Data;
                 await videosInsertRequest.UploadAsync();
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            Console.WriteLine("Execption #1 wow congrats");
+            Console.WriteLine("Execption #1 wow congrats: " + ex.Message);
         }
     }
 
