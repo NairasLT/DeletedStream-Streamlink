@@ -13,7 +13,6 @@ using Google.Apis.YouTube.v3.Data;
 
     class Upload
     {
-        Other log = new Other();
         string file;
     public async void Run(string Filename)
     {

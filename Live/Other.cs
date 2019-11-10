@@ -10,10 +10,10 @@ namespace Live
 {
     class Other
     {
-        public string URLpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\configURL.txt";
-        public string INTpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\configINTERVAL.txt";
-
-
+        public string URLpath;
+        public string FolderPath;
+        public string INTpath;
+        public string MainPath;
         public void Uploader(string filename)
         {
             var uple = new Upload();
