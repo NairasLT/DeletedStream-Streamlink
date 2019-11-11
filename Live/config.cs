@@ -74,11 +74,9 @@ namespace Live
 
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("Streamlink HLS timeout in SECONDS. default is 1800Sec - 30 mins");
+                        Console.WriteLine("USELESS: Streamlink HLS timeout in SECONDS. default is 1800Sec - 30 mins");
+                        Console.WriteLine("Type a higher number if your internet is slow, if not type, 60");
                         Console.ResetColor();
-                        Console.WriteLine("   what is HLS timeout? if the live stream gets discconected, for 30 seconds");
-                        Console.WriteLine("   and timeout is 1 min streamlink will write the livestream to the same file");
-                        Console.WriteLine("   if the limestream gets dissconected for 3 minutes it will write to another file if timeout is lower than 3 minutes");
                         hlsinterval = int.Parse(Console.ReadLine());
                         using (StreamWriter sw = File.CreateText(log.MainPath))
                         {
@@ -107,8 +105,23 @@ namespace Live
             string[] ints = new string[lineCount + 1]; // Nes esa 0 based jai bus error patikrink!! <---
             for (var i = 1; i <= lineCount; i++)
             {
-                Console.WriteLine(string.Format("Please enter The '{0}' URL Interval in MILLISECONDS to Check", i)); // REIK PAKEIST PASKUI KAD RODYTU URL! NE NEREIK KOLKAS
-                ints[i] = Console.ReadLine();
+                local();
+
+                void local()
+                {
+                    Console.WriteLine(string.Format("Please enter The '{0}' URL Interval in MILLISECONDS to Check", i)); // REIK PAKEIST PASKUI KAD RODYTU URL! NE NEREIK KOLKAS
+                    int temp = int.Parse(Console.ReadLine());
+                    if (temp < 360000)
+                    {
+                        Console.WriteLine("Enter a value in MILLISECONDS higher than 360000: ");
+                        local();
+                    }
+                    else
+                    {
+                        ints[i] = temp.ToString();
+                    }
+                }
+
             }
             using (StreamWriter sw = File.CreateText(log.INTpath))
             {
@@ -172,11 +185,14 @@ namespace Live
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
+
+
                 while (true)
                 {
                     ch.check(URL, HlsTimeout);
                     System.Threading.Thread.Sleep(Delay);
                 }
+
             }).Start();
         }
 
