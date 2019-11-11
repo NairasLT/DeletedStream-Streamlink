@@ -9,6 +9,7 @@ namespace Live
     {
         Other log = new Other();
         Checker ch = new Checker();
+        public int hlsinterval;
         public void configURL()
         {
             log.FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig";
@@ -39,7 +40,6 @@ namespace Live
                 Thread.Sleep(1000);
                 Console.Clear();
                 Console.WriteLine("Setup is Done For Urls.\n"+string.Join("\n", urls));
-                Thread.Sleep(3000);
 
             if(log.ConfigCheckExist(log.INTpath) == false)
                 {
@@ -64,27 +64,29 @@ namespace Live
                             ch.AutoUploading = true;
                             Console.WriteLine("Auto-Uploading Enabled.");
                             Thread.Sleep(1300);
-
-                            using (StreamWriter sw = File.CreateText(log.MainPath))
-                            {
-                                sw.Write("true");
-                            }
-
                         }
                         if (inp1.Contains("no"))
                         {
                             ch.AutoUploading = false;
                             Console.WriteLine("Auto-Uploading Disabled.");
                             Thread.Sleep(1300);
-
-                            using (StreamWriter sw = File.CreateText(log.MainPath))
-                            {
-                                sw.Write("false");
-                            }
-
                         }
 
-                }
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Streamlink HLS timeout in SECONDS. default is 1800Sec - 30 mins");
+                        Console.ResetColor();
+                        Console.WriteLine("   what is HLS timeout? if the live stream gets discconected, for 30 seconds");
+                        Console.WriteLine("   and timeout is 1 min streamlink will write the livestream to the same file");
+                        Console.WriteLine("   if the limestream gets dissconected for 3 minutes it will write to another file if timeout is lower than 3 minutes");
+                        hlsinterval = int.Parse(Console.ReadLine());
+                        using (StreamWriter sw = File.CreateText(log.MainPath))
+                        {
+                            sw.Write(ch.AutoUploading.ToString() + "\n" + hlsinterval);
+                        }
+                        Thread.Sleep(1000);
+
+                    }
 
                 }
 
@@ -131,11 +133,18 @@ namespace Live
             {
                 URLConf = System.IO.File.ReadAllText(log.URLpath);
                 INTConf = System.IO.File.ReadAllText(log.INTpath);
+                string mainpathtext = File.ReadAllText(log.MainPath);
+                hlsinterval = int.Parse(GetLine(mainpathtext, 2));
+                ch.AutoUploading = bool.Parse(GetLine(mainpathtext, 1));
+                Console.WriteLine("=================\n\n Info from config file\n");
+                Console.WriteLine("Auto Uploading: " + ch.AutoUploading);
+                Console.WriteLine("HLS Timeout: " + hlsinterval);
                 Console.WriteLine(URLConf);
                 Console.WriteLine(INTConf);
                 urllines = log.CountLines(log.URLpath);
                 intlines = log.CountLines(log.INTpath);
                 Console.WriteLine(string.Format("URL LINES: {0}\nINTERVAL LINES: {1}", urllines, intlines));
+                Console.WriteLine("\n=================\n");
                 Thread.Sleep(500);
                 LoadConfig();
             }
@@ -153,19 +162,19 @@ namespace Live
             for (int i = 1; i <= urllines; i++)
             {
                 string cont = GetLine(INTConf, i);
-                Threader(GetLine(URLConf, i), int.Parse(cont));
+                Threader(GetLine(URLConf, i), int.Parse(cont), hlsinterval);
             }
 
         }
 
-        public void Threader(string URL, int Delay)
+        public void Threader(string URL, int Delay, int HlsTimeout)
         {
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
                 while (true)
                 {
-                    ch.check(URL);
+                    ch.check(URL, HlsTimeout);
                     System.Threading.Thread.Sleep(Delay);
                 }
             }).Start();

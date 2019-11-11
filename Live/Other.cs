@@ -10,6 +10,8 @@ namespace Live
 {
     class Other
     {
+        Upload upl = new Upload();
+        Checker ch = new Checker();
         public string URLpath;
         public string FolderPath;
         public string INTpath;
@@ -40,6 +42,30 @@ namespace Live
                 return true;
             }
         }
+
+        public void commands()
+        {
+            string inp = Console.ReadLine();
+            if (inp.Contains("uploadvideo"))
+            {
+                Console.Clear();
+                Thread.Sleep(1000);
+                Console.WriteLine("Enter a Path, or the filename if the video is in the same folder as the live.exe\n   example: myvideo.mp4");
+                string inp2 = Console.ReadLine();
+                upl.Run(inp2);
+            }
+            if (inp.Contains("checkonce"))
+            {
+                Console.Clear();
+                Thread.Sleep(1000);
+                Console.WriteLine("Enter the URL, you can enter here /watch urls not channel urls with /live tag\n   Cause they are checked one time.");
+                string urler = Console.ReadLine();
+                Console.WriteLine("Write HLS timeout, enter 60 if you dont know what this means.");
+                int customhls = int.Parse(Console.ReadLine());
+                ch.check(urler, customhls);
+            }
+        }
+
         public int CountLines(string Path)
         {
             int lineCount = File.ReadLines(Path).Count();

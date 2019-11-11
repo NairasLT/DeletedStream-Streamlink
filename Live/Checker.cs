@@ -21,16 +21,16 @@ using System.Threading.Tasks;
 
 
 
-    public async Task check(string ChannelURL)
+    public async Task check(string ChannelURL, int hlstimeout)
         {
 
-        Console.WriteLine(string.Format("Started Thread For Channel URL: {0}", ChannelURL));
+        Console.WriteLine(DateTime.Now + string.Format(" Started Thread For Channel URL: {0}", ChannelURL));
         // EXECUTINA COMMAND LINE, VISADA KEICIASIA FILENAME VALUE I DABARTINE DATA
 
         filename = DateTime.Now.ToString() + "";
         filename = filename.Replace(':', '-').Replace('/', '-').Replace(' ', '_'); // REGEX
         filename += ".mp4"; // naujas
-        string final = "streamlink --hls-live-restart --hls-timeout 1800 --hls-segment-threads 7 -o " + filename + " " + ChannelURL + " best"; // COMMAND - URL
+        string final = string.Format("streamlink --hls-live-restart --hls-timeout {0} --hls-segment-threads 7 -o " + filename + " " + ChannelURL + " best", hlstimeout); // COMMAND - URL
         Process cmd = new Process();
         cmd.StartInfo.FileName = "cmd.exe";
         cmd.StartInfo.RedirectStandardInput = true;
@@ -44,7 +44,7 @@ using System.Threading.Tasks;
         message = cmd.StandardOutput.ReadToEnd();
         if (message.Contains("error"))
             {
-            Console.WriteLine("STREAM OFFLINE FOR URL: " + ChannelURL); // NERANDA RETURININA
+            Console.WriteLine(DateTime.Now +" STREAM OFFLINE FOR URL: " + ChannelURL); // NERANDA RETURININA
             }
 
         if (message.Contains("Stream ended") && message.Contains(ChannelURL)) // PASIBAIGE VISI STREAMAI SU /LIVE TAGU BAIGIASI PO 5 MIN!

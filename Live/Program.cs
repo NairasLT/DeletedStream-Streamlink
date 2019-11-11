@@ -22,6 +22,7 @@ namespace Live
         Config conf = new Config();
         Upload upl = new Upload();
         Checker ch = new Checker();
+        Other oth = new Other();
         public void starter() // REIKIA SUTAISYTI TIMINGS
         {
             conf.configURL();
@@ -39,24 +40,8 @@ namespace Live
             Console.WriteLine("<-------------->\n");
             Console.ResetColor();
             Console.WriteLine("Press Enter to Start Checking.");
-            string inp = Console.ReadLine();
-            if (inp.Contains("uploadvideo"))
-            {
-                Console.Clear();
-                Thread.Sleep(1000);
-                Console.WriteLine("Enter a Path, or the filename if the video is in the same folder as the live.exe\n   example: myvideo.mp4");
-                string inp2 = Console.ReadLine();
-                upl.Run(inp2);
-            }
-            if (inp.Contains("checkonce"))
-            {
-                Console.Clear();
-                Thread.Sleep(1000);
-                Console.WriteLine("Enter the URL, you can enter here video urls. Cause they are checked one time.");
-                string urler = Console.ReadLine();
-                ch.check(urler);
-            }
 
+            oth.commands();
             conf.configRead();
 
 
