@@ -48,7 +48,7 @@ namespace Live
 
             while (true)
             {
-                Console.ReadLine();
+                oth.commands();
             }
 
 
