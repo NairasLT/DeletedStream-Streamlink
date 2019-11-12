@@ -42,6 +42,7 @@ using System.Threading.Tasks;
         cmd.StandardInput.Flush();
         cmd.StandardInput.Close();
         message = cmd.StandardOutput.ReadToEnd();
+        Console.WriteLine(string.Format("\n\n{0}\n\n", message));
         if (message.Contains("error"))
             {
             Console.WriteLine(DateTime.Now +" STREAM OFFLINE FOR URL: " + ChannelURL); // NERANDA RETURININA
@@ -54,25 +55,17 @@ using System.Threading.Tasks;
 
                 if (AutoUploading == true)
                 {
-
-                    Console.WriteLine(ChannelURL); // WENT OFFLINE
-
-
-
-                    new Thread(() =>
-                    {
-                        Thread.CurrentThread.IsBackground = true;
-                        Console.WriteLine("---> TRYING TO UPLOAD!");
-                        upl.Run(filename); // REIKIA SUTAISYKTI GET TIKRAI VEIKTU REPEAT UPLOAD ON THREAD!!!
-
-                    }).Start();
-
+                    Console.WriteLine("Stream Ended Now Will Be Uploading");
+                    Thread t = new Thread(() => Uploade(filename));
+                    t.Start();
                 }
-                Console.WriteLine("CREATED THREAD, RETURNING TO CHECKING");
+                Console.WriteLine("CREATED THREAD FOR UPLOADING NOW WILL BE CHECKING AGAIN FOR URL: " + ChannelURL);
             }
             else
             {
-                Console.WriteLine("OFFLINE #N2 PROCCES ENDED: " + ChannelURL);
+                Console.WriteLine("PROCCESS KILLED YOU WHORE!!!! / Or Rate Limited even better!!!");
+                Thread t1 = new Thread(() => Uploade(filename));
+                t1.Start();
             }
         }
 
@@ -80,10 +73,19 @@ using System.Threading.Tasks;
 
 
 
-
         }
 
-      }
+
+    public void Uploade(string ChannelURL)
+    {
+        Console.WriteLine(ChannelURL); // WENT OFFLINE
+        Console.WriteLine("---> TRYING TO UPLOAD!");
+        upl.Run(filename); // REIKIA SUTAISYKTI GET TIKRAI VEIKTU REPEAT UPLOAD ON THREAD!!!
+    }
+
+
+
+}
 
  
 
