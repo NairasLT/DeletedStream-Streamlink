@@ -21,7 +21,8 @@ using System.Threading.Tasks;
 
 
 
-    public async Task check(string ChannelURL, int hlstimeout)
+    public async Task check(string ChannelURL, int hlstimeout){
+        try
         {
 
         Console.WriteLine(DateTime.Now + string.Format(" Started Thread For Channel URL: {0}", ChannelURL));
@@ -42,7 +43,6 @@ using System.Threading.Tasks;
         cmd.StandardInput.Flush();
         cmd.StandardInput.Close();
         message = cmd.StandardOutput.ReadToEnd();
-        Console.WriteLine(string.Format("\n\n{0}\n\n", message));
         if (message.Contains("error"))
             {
             Console.WriteLine(DateTime.Now +" STREAM OFFLINE FOR URL: " + ChannelURL); // NERANDA RETURININA
@@ -51,39 +51,30 @@ using System.Threading.Tasks;
         {
             if (message.Contains("Stream ended") && message.Contains(ChannelURL)) // PASIBAIGE VISI STREAMAI SU /LIVE TAGU BAIGIASI PO 5 MIN!
             {
-
-
                 if (AutoUploading == true)
                 {
-                    Console.WriteLine("Stream Ended Now Will Be Uploading");
-                    Thread t = new Thread(() => Uploade(filename));
-                    t.Start();
+                        upl.writenotDone(filename);
                 }
-                Console.WriteLine("CREATED THREAD FOR UPLOADING NOW WILL BE CHECKING AGAIN FOR URL: " + ChannelURL);
             }
             else
             {
-                Console.WriteLine("PROCCESS KILLED YOU WHORE!!!! / Or Rate Limited even better!!!");
-                Thread t1 = new Thread(() => Uploade(filename));
-                t1.Start();
+                    Console.WriteLine("PROCCESS KILLED YOU WHORE!!!! / Or Rate Limited even better!!!");
+                    Console.WriteLine(message);
+                    upl.writenotDone(filename);
+
             }
         }
 
 
 
-
-
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
 
 
-    public void Uploade(string ChannelURL)
-    {
-        Console.WriteLine(ChannelURL); // WENT OFFLINE
-        Console.WriteLine("---> TRYING TO UPLOAD!");
-        upl.Run(filename); // REIKIA SUTAISYKTI GET TIKRAI VEIKTU REPEAT UPLOAD ON THREAD!!!
-    }
-
-
+        }
 
 }
 

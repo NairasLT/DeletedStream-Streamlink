@@ -10,12 +10,12 @@ namespace Live
         Other log = new Other();
         Checker ch = new Checker();
         public int hlsinterval;
+
+
+
         public void configURL()
         {
-            log.FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig";
-            log.URLpath = log.FolderPath + "\\configURL.txt";
-            log.INTpath = log.FolderPath + "\\configINTERVAL.txt";
-            log.MainPath = log.FolderPath + "\\Main.txt";
+
             if (log.ConfigCheckExist(log.FolderPath) == false)
             {
                 Console.WriteLine("The Config Folder Dosent Exist, Creating it");
@@ -36,6 +36,7 @@ namespace Live
                 using (StreamWriter sw = File.CreateText(log.URLpath))
                 {
                     sw.Write(string.Join("\n", urls).Trim());
+                    sw.Close();
                 }
                 Thread.Sleep(1000);
                 Console.Clear();
@@ -81,9 +82,18 @@ namespace Live
                         using (StreamWriter sw = File.CreateText(log.MainPath))
                         {
                             sw.Write(ch.AutoUploading.ToString() + "\n" + hlsinterval);
+                            sw.Close();
                         }
                         Thread.Sleep(1000);
 
+                    }
+                    if (log.ConfigCheckExist(log.NotDomePath) == false)
+                    {
+                        using (StreamWriter sw = File.CreateText(log.NotDomePath))
+                        {
+                            sw.Write("");
+                            sw.Close();
+                        }
                     }
 
                 }
@@ -126,6 +136,7 @@ namespace Live
             using (StreamWriter sw = File.CreateText(log.INTpath))
             {
                     sw.Write(string.Join("\n", ints).Trim());
+                sw.Close();
             }
 
 
@@ -144,6 +155,25 @@ namespace Live
         {
             try
             {
+                int linecount = log.CountLines(log.NotDomePath);
+                string txt = File.ReadAllText(log.NotDomePath);
+                for(int i = 1; i <= linecount; i++)
+                {
+                    log.notDoneList.Add(GetLine(txt, i));
+                }
+
+                string[] logno = log.notDoneList.ToArray();
+                Console.WriteLine("\n");
+                Console.WriteLine("-----------");
+                string txt1 = "";
+                foreach (var item in logno)
+                {
+                    txt1 += item + "\n";
+                }
+                Console.WriteLine(txt1.Trim());
+                Console.WriteLine("-----------");
+                Console.WriteLine("\n");
+
                 URLConf = System.IO.File.ReadAllText(log.URLpath);
                 INTConf = System.IO.File.ReadAllText(log.INTpath);
                 string mainpathtext = File.ReadAllText(log.MainPath);
@@ -190,7 +220,7 @@ namespace Live
                 while (true)
                 {
                     ch.check(URL, HlsTimeout);
-                    System.Threading.Thread.Sleep(Delay);
+                    Thread.Sleep(Delay);
                 }
 
             }).Start();
