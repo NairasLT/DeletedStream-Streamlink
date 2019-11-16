@@ -10,16 +10,25 @@ namespace Live
 {
     class Other
     {
-        Checker ch = new Checker();
         Upload upl = new Upload();
+        Checker ch = new Checker();
+        public string URLpath;
+        public string FolderPath;
+        public string INTpath;
+        public string MainPath;
+        public void Uploader(string filename)
+        {
+            var uple = new Upload();
+            Thread thr = new Thread(upload);
+            thr.Start();
 
-        public string FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig";
-        public string URLpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig\\configURL.txt";
-        public string INTpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig\\configINTERVAL.txt";
-        public string MainPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig\\Main.txt";
-        public string NotDomePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig\\NotUploadedList.txt";
-        public List<string> notDoneList = new List<string>();
+            void upload()
+            {
+                uple.Run(filename);
+                Console.WriteLine(filename);
+            }
 
+        }
 
         public bool ConfigCheckExist(string path)
         {
@@ -33,7 +42,6 @@ namespace Live
                 return true;
             }
         }
-
 
         public void commands()
         {

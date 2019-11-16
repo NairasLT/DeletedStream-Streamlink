@@ -86,7 +86,6 @@
   <ItemGroup>
     <Compile Include="Checker.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="ListNotUploaded.cs" />
     <Compile Include="Other.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

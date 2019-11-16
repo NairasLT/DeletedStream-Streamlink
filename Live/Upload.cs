@@ -10,20 +10,17 @@ using Google.Apis.Upload;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
-using System.Linq;
-using System.Text.RegularExpressions;
 
-class Upload
+    class Upload
     {
         string file;
-
-    public async Task Run(string Filename)
+    public async void Run(string Filename)
     {
         try
         {
             file = Filename;
             UserCredential credential;
-            using (var stream = new FileStream(@"C:\client_secrets2.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(@"C:\client_secrets.json", FileMode.Open, FileAccess.Read))
             {
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
@@ -64,14 +61,7 @@ class Upload
         catch (Exception ex)
         {
             Console.WriteLine("Execption #1 wow congrats: " + ex.Message);
-
-            if(ex.Message.Contains("Could not find file"))
-            {
-                writeDeleteLineUploaded(file);
-            }
-
         }
-
     }
 
     public void videosInsertRequest_ProgressChanged(Google.Apis.Upload.IUploadProgress progress)
@@ -84,12 +74,6 @@ class Upload
 
                 case UploadStatus.Failed:
                 Console.WriteLine(string.Format(" -------->  An error prevented the upload from completing.\n{0}", progress.Exception));
-
-                if (progress.Exception.ToString().Contains("Response status code does not indicate success: 403 (Forbidden)"))
-                {
-                    Console.WriteLine("\n\nQUOTA LIMITED! WAITING 3 HOURS\n\n");
-                    Thread.Sleep(10800000);
-                }
                 break;
             }
         }
@@ -97,55 +81,12 @@ class Upload
         public void videosInsertRequest_ResponseReceived(Video video)
         {
         Console.WriteLine(string.Format("Video id '{0}' was successfully uploaded.", video.Id));
-        writeDeleteLineUploaded(file);
-        }
-
-
-    public void writenotDone(string FileNotUploaded)
-    {
-        string pth = new Other().NotDomePath; // wow you can do instance of string. not of the intire class.
-
-        using (StreamWriter sw = File.AppendText(pth))
-        {
-            sw.WriteLine(FileNotUploaded);
-            sw.Close();
-        }
     }
 
-    public void writeDeleteLineUploaded(string FileNameToDelete)
-    {
-        string path = new Other().NotDomePath;
-        string path1 = new Other().MainPath;
-        string item = FileNameToDelete;
-        var lines = File.ReadAllLines(path).Where(line => line.Trim() != item).ToArray();
-        File.WriteAllLines(path, lines);
-    }
 
-    public string getFirstLineOfFile(string Filepath)
-    {
-        string line1 = File.ReadLines(Filepath).First();
-        return line1;
-    }
 
-    public void UploadVideoOnNewThread(string FileNameToUplaod) // NOT SURE IF WORKS!!!!!!! <-------
-    {
-        try
-        {
 
-            Thread thr = new Thread(upload);
-            thr.Start();
-            Console.WriteLine("Created Thread for:" + FileNameToUplaod);
-            void upload()
-            {
-                Run(FileNameToUplaod);
-                Console.WriteLine("Uploading for: " + FileNameToUplaod);
-            }
-        }
-        catch (Exception ex2)
-        {
-            Console.WriteLine("Error, void UploadVideoOnNewThread: " + ex2.Message);
-        }
 
-    }
+
 
 }
