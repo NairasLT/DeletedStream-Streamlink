@@ -43,28 +43,19 @@ using System.Threading.Tasks;
         cmd.StandardInput.Flush();
         cmd.StandardInput.Close();
         message = cmd.StandardOutput.ReadToEnd();
-        if (message.Contains("error"))
+
+        if (message.Contains("error: No playable streams found on this URL:") || message.Contains("error: Unable to open URL:"))
             {
             Console.WriteLine(DateTime.Now +" STREAM OFFLINE FOR URL: " + ChannelURL); // NERANDA RETURININA
             }
-        else
+
+        if(message.Contains("Stream ended"))
         {
-            if (message.Contains("Stream ended") && message.Contains(ChannelURL)) // PASIBAIGE VISI STREAMAI SU /LIVE TAGU BAIGIASI PO 5 MIN!
-            {
                 if (AutoUploading == true)
                 {
                         upl.writenotDone(filename);
                 }
-            }
-            else
-            {
-                    Console.WriteLine("PROCCESS KILLED YOU WHORE!!!! / Or Rate Limited even better!!!");
-                    Console.WriteLine(message);
-                    upl.writenotDone(filename);
-
-            }
         }
-
 
 
         }

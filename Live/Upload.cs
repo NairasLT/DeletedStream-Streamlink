@@ -23,7 +23,7 @@ class Upload
         {
             file = Filename;
             UserCredential credential;
-            using (var stream = new FileStream(@"C:\client_secrets2.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(@"C:\client_secrets.json", FileMode.Open, FileAccess.Read))
             {
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
@@ -87,7 +87,7 @@ class Upload
 
                 if (progress.Exception.ToString().Contains("Response status code does not indicate success: 403 (Forbidden)"))
                 {
-                    Console.WriteLine("\n\nQUOTA LIMITED! WAITING 3 HOURS\n\n");
+                    Console.WriteLine("\n\nQUOTA LIMITED! TRYING TO UPLOAD IN 3 HOURS\n\nCHECKING WILL BE CONTINUED THIS WAITING IS ON ANOTHER THREAD.");
                     Thread.Sleep(10800000);
                 }
                 break;

@@ -164,6 +164,7 @@ namespace Live
 
                 string[] logno = log.notDoneList.ToArray();
                 Console.WriteLine("\n");
+                Console.WriteLine("UPLOAD QUEUE: " + log.CountLines(log.NotDomePath));
                 Console.WriteLine("-----------");
                 string txt1 = "";
                 foreach (var item in logno)
