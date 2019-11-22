@@ -35,7 +35,7 @@ namespace Live
         }
 
 
-        public void commands()
+        public async void commands()
         {
             string inp = Console.ReadLine();
             if (inp.Contains("uploadvideo"))
@@ -44,7 +44,7 @@ namespace Live
                 Thread.Sleep(1000);
                 Console.WriteLine("Enter a Path, or the filename if the video is in the same folder as the live.exe\n   example: myvideo.mp4");
                 string inp2 = Console.ReadLine();
-                upl.Run(inp2);
+                await upl.Run(inp2);
             }
             if (inp.Contains("checkonce"))
             {
@@ -54,7 +54,7 @@ namespace Live
                 string urler = Console.ReadLine();
                 Console.WriteLine("Write HLS timeout, enter 60 if you dont know what this means.");
                 int customhls = int.Parse(Console.ReadLine());
-                ch.check(urler, customhls);
+                await ch.check(urler, customhls);
             }
         }
 

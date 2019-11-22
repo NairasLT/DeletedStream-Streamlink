@@ -10,8 +10,7 @@ namespace Live
         Other log = new Other();
         Checker ch = new Checker();
         public int hlsinterval;
-
-
+        bool tempSetupUploading;
 
         public void configURL()
         {
@@ -59,16 +58,15 @@ namespace Live
                         Console.WriteLine("\n\nTo choose type, yes or no, in lowercase");
                         Thread.Sleep(1000);
                         string inp1 = Console.ReadLine();
-
                         if (inp1.Contains("yes"))
                         {
-                            ch.AutoUploading = true;
+                            tempSetupUploading = true;
                             Console.WriteLine("Auto-Uploading Enabled.");
                             Thread.Sleep(1300);
                         }
                         if (inp1.Contains("no"))
                         {
-                            ch.AutoUploading = false;
+                            tempSetupUploading = false;
                             Console.WriteLine("Auto-Uploading Disabled.");
                             Thread.Sleep(1300);
                         }
@@ -79,9 +77,10 @@ namespace Live
                         Console.WriteLine("Type a higher number if your internet is slow, if not type, 60");
                         Console.ResetColor();
                         hlsinterval = int.Parse(Console.ReadLine());
+
                         using (StreamWriter sw = File.CreateText(log.MainPath))
                         {
-                            sw.Write(ch.AutoUploading.ToString() + "\n" + hlsinterval);
+                            sw.Write(tempSetupUploading.ToString() + "\n" + hlsinterval);
                             sw.Close();
                         }
                         Thread.Sleep(1000);
@@ -133,15 +132,13 @@ namespace Live
                 }
 
             }
+
             using (StreamWriter sw = File.CreateText(log.INTpath))
             {
                     sw.Write(string.Join("\n", ints).Trim());
                 sw.Close();
             }
 
-
-
-            //Console.WriteLine(string.Join("\n", urls));
             Thread.Sleep(1000);
             Console.Clear();
             Console.WriteLine("Setup is Done.\n" + string.Join("\n", ints));
@@ -155,6 +152,12 @@ namespace Live
         {
             try
             {
+                string mainpathtext = File.ReadAllText(log.MainPath);
+                URLConf = System.IO.File.ReadAllText(log.URLpath);
+                INTConf = System.IO.File.ReadAllText(log.INTpath);
+                urllines = log.CountLines(log.URLpath);
+                intlines = log.CountLines(log.INTpath);  //FUCKED SHIT GOES HERE
+                hlsinterval = int.Parse(GetLine(mainpathtext, 2));
                 int linecount = log.CountLines(log.NotDomePath);
                 string txt = File.ReadAllText(log.NotDomePath);
                 for(int i = 1; i <= linecount; i++)
@@ -174,19 +177,11 @@ namespace Live
                 Console.WriteLine(txt1.Trim());
                 Console.WriteLine("-----------");
                 Console.WriteLine("\n");
-
-                URLConf = System.IO.File.ReadAllText(log.URLpath);
-                INTConf = System.IO.File.ReadAllText(log.INTpath);
-                string mainpathtext = File.ReadAllText(log.MainPath);
-                hlsinterval = int.Parse(GetLine(mainpathtext, 2));
-                ch.AutoUploading = bool.Parse(GetLine(mainpathtext, 1));
                 Console.WriteLine("=================\n\n Info from config file\n");
-                Console.WriteLine("Auto Uploading: " + ch.AutoUploading);
+                Console.WriteLine("Auto Uploading: " + ch.AutoUploading());//AutoUploading);
                 Console.WriteLine("HLS Timeout: " + hlsinterval);
                 Console.WriteLine(URLConf);
                 Console.WriteLine(INTConf);
-                urllines = log.CountLines(log.URLpath);
-                intlines = log.CountLines(log.INTpath);
                 Console.WriteLine(string.Format("URL LINES: {0}\nINTERVAL LINES: {1}", urllines, intlines));
                 Console.WriteLine("\n=================\n");
                 Thread.Sleep(500);
@@ -201,6 +196,7 @@ namespace Live
             
         }
 
+
         public void LoadConfig()
         {
             for (int i = 1; i <= urllines; i++)
@@ -213,21 +209,20 @@ namespace Live
 
         public void Threader(string URL, int Delay, int HlsTimeout)
         {
-            new Thread(() =>
+            new Thread(async () =>
             {
                 Thread.CurrentThread.IsBackground = true;
-
-
                 while (true)
                 {
-                    ch.check(URL, HlsTimeout);
+                    Checker cho = new Checker();
+                    await cho.check(URL, HlsTimeout);
                     Thread.Sleep(Delay);
                 }
 
             }).Start();
         }
 
-        string GetLine(string text, int lineNo)
+        public string GetLine(string text, int lineNo)
         {
             string[] lines = text.Replace("\r", "").Split('\n');
             return lines.Length >= lineNo ? lines[lineNo - 1] : null;

@@ -17,15 +17,11 @@ namespace Live
 
             while (true)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(7000);
 
                 if (new FileInfo(path).Length > 0)
                 {
-
-
-
                     string line1 = File.ReadLines(path).First();
-
                     if (!string.IsNullOrWhiteSpace(line1)) // PAZIUREK DEL ! OPERATOR NEZINAU AR TIKRAI VEIKIA!!!!!!!!
                     {
                         try
@@ -44,12 +40,9 @@ namespace Live
 
                     }
                 }
-        } // WHILE BRACKET
+        } 
 
         }
-
-
-
 
 
     }

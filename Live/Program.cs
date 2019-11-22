@@ -23,6 +23,7 @@ namespace Live
         Upload upl = new Upload();
         Checker ch = new Checker();
         Other oth = new Other();
+        VarsAndFunctions afera = new VarsAndFunctions();
         ListNotUploaded lnu = new ListNotUploaded();
         public void starter() // REIKIA SUTAISYTI TIMINGS
         {
@@ -37,13 +38,12 @@ namespace Live
             Console.WriteLine("5. To get client_secrets.json go to http://console.developers.google.com/ \n   create a project -> create crendentials -> Oauth2 -> download json rename it to 'client_secrets.json'\n   or just google it how to.\n");
             Console.WriteLine("6. If you have any problems, delete the LiveConfig folder on the desktop\n   if not fixed create an issue on github.\n");
             Console.WriteLine("7. NOTE: if you are auto-uploading to youtube there is a QUOTA limit 6 videos every day.\n   NOTE: Make sure to update from GitHub:\n   https://github.com/NairasLT/Checking-Downloading-Uploading-Livestream_using_streamlink");
-            Console.WriteLine("                                  Version: 1.1 cmds: uploadvideo, checkonce");
+            Console.WriteLine("                                  Version: 1.2.1 cmds: uploadvideo, checkonce");
             Console.WriteLine("<-------------->\n");
             Console.ResetColor();
             Console.WriteLine("Press Enter to Start Checking.");
             oth.commands();
             conf.configRead();
-
             Thread thr = new Thread(lnu.AutoUpload);
             thr.Start();
 

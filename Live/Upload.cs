@@ -15,62 +15,65 @@ using System.Text.RegularExpressions;
 
 class Upload
     {
-        string file;
+    public string file;
 
     public async Task Run(string Filename)
     {
-        try
-        {
-            file = Filename;
-            UserCredential credential;
-            using (var stream = new FileStream(@"C:\client_secrets.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    // This OAuth 2.0 access scope allows an application to upload files to the
-                    // authenticated user's YouTube channel, but doesn't allow other types of access.
-                    new[] { YouTubeService.Scope.YoutubeUpload },
-                    "user",
-                    CancellationToken.None
-                );
-            }
 
-            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = Assembly.GetExecutingAssembly().GetName().Name
-            });
+        Console.WriteLine("FILE NAME FOR UPLOAD: " + Filename);
 
-            var video = new Video();
-            video.Snippet = new VideoSnippet();
-            video.Snippet.Title = DateTime.Now.ToString();
-            video.Snippet.Description = "Ikelta Automatiskai.\nhttps://github.com/NairasLT/Checking-Downloading-Uploading-Livestream_using_streamlink";
-            video.Snippet.Tags = new string[] { "auto", "upload" };
-            video.Snippet.CategoryId = "22"; // See https://developers.google.com/youtube/v3/docs/videoCategories/list
-            video.Status = new VideoStatus();
-            video.Status.PrivacyStatus = "unlisted"; // or "private" or "public"
-            Console.WriteLine("FILE NAME FOR UPLOAD: " + Filename);
-            var filePath = Filename; // Replace with path to actual movie file.
+         try
+         {
+             file = Filename;
+             UserCredential credential;
+             using (var stream = new FileStream(@"C:\client_secrets.json", FileMode.Open, FileAccess.Read))
+             {
+                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                     GoogleClientSecrets.Load(stream).Secrets,
+                     // This OAuth 2.0 access scope allows an application to upload files to the
+                     // authenticated user's YouTube channel, but doesn't allow other types of access.
+                     new[] { YouTubeService.Scope.YoutubeUpload },
+                     "user",
+                     CancellationToken.None
+                 );
+             }
 
-            using (var fileStream = new FileStream(filePath, FileMode.Open))
-            {
-                var videosInsertRequest = youtubeService.Videos.Insert(video, "snippet,status", fileStream, "video/*");
-                videosInsertRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
-                videosInsertRequest.ResponseReceived += videosInsertRequest_ResponseReceived;
+             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+             {
+                 HttpClientInitializer = credential,
+                 ApplicationName = Assembly.GetExecutingAssembly().GetName().Name
+             });
 
-                await videosInsertRequest.UploadAsync();
-            }
+             var video = new Video();
+             video.Snippet = new VideoSnippet();
+             video.Snippet.Title = DateTime.Now.ToString();
+             video.Snippet.Description = "Ikelta Automatiskai.\nhttps://github.com/NairasLT/Checking-Downloading-Uploading-Livestream_using_streamlink";
+             video.Snippet.Tags = new string[] { "auto", "upload" };
+             video.Snippet.CategoryId = "22"; // See https://developers.google.com/youtube/v3/docs/videoCategories/list
+             video.Status = new VideoStatus();
+             video.Status.PrivacyStatus = "unlisted"; // or "private" or "public"
+             Console.WriteLine("FILE NAME FOR UPLOAD: " + Filename);
+             var filePath = Filename; // Replace with path to actual movie file.
+
+             using (var fileStream = new FileStream(filePath, FileMode.Open))
+             {
+                 var videosInsertRequest = youtubeService.Videos.Insert(video, "snippet,status", fileStream, "video/*");
+                 videosInsertRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
+                 videosInsertRequest.ResponseReceived += videosInsertRequest_ResponseReceived;
+
+                 await videosInsertRequest.UploadAsync();
+             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Execption #1 wow congrats: " + ex.Message);
+         catch (Exception ex)
+         {
+             Console.WriteLine("Execption #1 wow congrats: " + ex.Message);
 
-            if(ex.Message.Contains("Could not find file"))
-            {
-                writeDeleteLineUploaded(file);
-            }
+             if(ex.Message.Contains("Could not find file"))
+             {
+                 writeDeleteLineUploaded(file);
+             }
 
-        }
+         }
 
     }
 
@@ -135,9 +138,9 @@ class Upload
             Thread thr = new Thread(upload);
             thr.Start();
             Console.WriteLine("Created Thread for:" + FileNameToUplaod);
-            void upload()
+            async void upload()
             {
-                Run(FileNameToUplaod);
+                await Run(FileNameToUplaod);
                 Console.WriteLine("Uploading for: " + FileNameToUplaod);
             }
         }
