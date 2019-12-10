@@ -22,13 +22,13 @@ namespace Live
                 if (new FileInfo(path).Length > 0)
                 {
                     string line1 = File.ReadLines(path).First();
-                    if (!string.IsNullOrWhiteSpace(line1)) // PAZIUREK DEL ! OPERATOR NEZINAU AR TIKRAI VEIKIA!!!!!!!!
+                    if (!string.IsNullOrWhiteSpace(line1))
                     {
                         try
                         {
                             Upload upl = new Upload();
                             Console.WriteLine("Sending To Upload Function");
-                            await upl.Run(line1); // REIKIA SUTAISYKTI GET TIKRAI VEIKTU REPEAT UPLOAD ON THREAD!!!
+                            await upl.Run(line1); 
                         }
 
                         catch (Exception ex3)

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
     class Checker
     {
-        public string filename = DateTime.Now.ToString().Replace(':', '-').Replace('/', '-').Replace(' ', '_') + ".mp4"; // DYNAMIC
+    public string filename = DateTime.Now.ToString().Replace(':', '-').Replace('/', '-').Replace(' ', '_') + ".mp4"; // DYNAMIC
     public async Task check(string ChannelURL, int hlstimeout){
         try
         {
@@ -42,7 +42,6 @@ using System.Threading.Tasks;
                 if (message.Contains("Stream ended"))
                 {
                     Console.WriteLine(DateTime.Now + " STREAM ENDED.");
-                    VarsAndFunctions afera = new VarsAndFunctions();
                     if (AutoUploading() == true)
                     {
                         Upload upl = new Upload();

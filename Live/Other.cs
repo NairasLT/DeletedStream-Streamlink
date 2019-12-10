@@ -11,7 +11,7 @@ namespace Live
     class Other
     {
         Checker ch = new Checker();
-        Upload upl = new Upload();
+        //Upload upl = new Upload();
 
         public string FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig";
         public string URLpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\LiveConfig\\configURL.txt";
@@ -31,30 +31,6 @@ namespace Live
             else // IF EXISTS
             {
                 return true;
-            }
-        }
-
-
-        public async void commands()
-        {
-            string inp = Console.ReadLine();
-            if (inp.Contains("uploadvideo"))
-            {
-                Console.Clear();
-                Thread.Sleep(1000);
-                Console.WriteLine("Enter a Path, or the filename if the video is in the same folder as the live.exe\n   example: myvideo.mp4");
-                string inp2 = Console.ReadLine();
-                await upl.Run(inp2);
-            }
-            if (inp.Contains("checkonce"))
-            {
-                Console.Clear();
-                Thread.Sleep(1000);
-                Console.WriteLine("Enter the URL, you can enter here /watch urls not channel urls with /live tag\n   Cause they are checked one time.");
-                string urler = Console.ReadLine();
-                Console.WriteLine("Write HLS timeout, enter 60 if you dont know what this means.");
-                int customhls = int.Parse(Console.ReadLine());
-                await ch.check(urler, customhls);
             }
         }
 

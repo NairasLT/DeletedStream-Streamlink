@@ -13,15 +13,12 @@ using Google.Apis.YouTube.v3.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-class Upload
+class Upload : Config
     {
     public string file;
-
     public async Task Run(string Filename)
     {
-
         Console.WriteLine("FILE NAME FOR UPLOAD: " + Filename);
-
          try
          {
              file = Filename;
@@ -37,7 +34,6 @@ class Upload
                      CancellationToken.None
                  );
              }
-
              var youtubeService = new YouTubeService(new BaseClientService.Initializer()
              {
                  HttpClientInitializer = credential,
@@ -76,7 +72,6 @@ class Upload
          }
 
     }
-
     public void videosInsertRequest_ProgressChanged(Google.Apis.Upload.IUploadProgress progress)
         {
             switch (progress.Status)
@@ -84,10 +79,8 @@ class Upload
                 case UploadStatus.Uploading:
                 Console.WriteLine(string.Format("{0} bytes sent.", progress.BytesSent));
                     break;
-
                 case UploadStatus.Failed:
                 Console.WriteLine(string.Format(" -------->  An error prevented the upload from completing.\n{0}", progress.Exception));
-
                 if (progress.Exception.ToString().Contains("Response status code does not indicate success: 403 (Forbidden)"))
                 {
                     Console.WriteLine("\n\nQUOTA LIMITED! TRYING TO UPLOAD IN 3 HOURS\n\nCHECKING WILL BE CONTINUED THIS WAITING IS ON ANOTHER THREAD.");
@@ -101,9 +94,11 @@ class Upload
         {
         Console.WriteLine(string.Format("Video id '{0}' was successfully uploaded.", video.Id));
         writeDeleteLineUploaded(file);
+        if (Global_EmailNotifications == true)
+        {
+            SendEmail(file);
         }
-
-
+    }
     public void writenotDone(string FileNotUploaded)
     {
         string pth = new Other().NotDomePath; // wow you can do instance of string. not of the intire class.
@@ -114,7 +109,6 @@ class Upload
             sw.Close();
         }
     }
-
     public void writeDeleteLineUploaded(string FileNameToDelete)
     {
         string path = new Other().NotDomePath;
