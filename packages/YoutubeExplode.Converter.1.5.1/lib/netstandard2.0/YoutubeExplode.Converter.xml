@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>YoutubeExplode.Converter</name>
+    </assembly>
+    <members>
+        <member name="T:YoutubeExplode.Converter.BackwardCompatibilityExtensions">
+            <summary>
+            Extensions for backwards compatibility.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.BackwardCompatibilityExtensions.DownloadAndProcessMediaStreamsAsync(YoutubeExplode.Converter.IYoutubeConverter,System.Collections.Generic.IReadOnlyList{YoutubeExplode.Videos.Streams.IStreamInfo},System.String,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads given media streams and processes them into a file using specified format.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.BackwardCompatibilityExtensions.DownloadVideoAsync(YoutubeExplode.Converter.IYoutubeConverter,YoutubeExplode.Videos.Streams.StreamManifest,System.String,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads a video to a file using specified format by selecting media streams from the given set.
+            </summary>
+        </member>
+        <member name="T:YoutubeExplode.Converter.ConversionPreset">
+            <summary>
+            Conversion preset.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionPreset.Name">
+            <summary>
+            Preset name.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.#ctor(System.String)">
+            <summary>
+            Initializes an instance of <see cref="T:YoutubeExplode.Converter.ConversionPreset"/>.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.op_Implicit(System.String)~YoutubeExplode.Converter.ConversionPreset">
+            <summary>
+            Implicit conversion to preset.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.op_Implicit(YoutubeExplode.Converter.ConversionPreset)~System.String">
+            <summary>
+            Implicit conversion to string.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.Equals(YoutubeExplode.Converter.ConversionPreset)">
+            <inheritdoc />
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.op_Equality(YoutubeExplode.Converter.ConversionPreset,YoutubeExplode.Converter.ConversionPreset)">
+            <summary>
+            Equality operator.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionPreset.op_Inequality(YoutubeExplode.Converter.ConversionPreset,YoutubeExplode.Converter.ConversionPreset)">
+            <summary>
+            Inequality operator.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionPreset.VeryFast">
+            <summary>
+            Much faster conversion speed and bigger output file size.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionPreset.Fast">
+            <summary>
+            Slightly faster conversion speed and bigger output file size.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionPreset.Medium">
+            <summary>
+            Default preset.
+            Balanced conversion speed and output file size.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionPreset.Slow">
+            <summary>
+            Slightly slower conversion speed and smaller output file size.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionPreset.VerySlow">
+            <summary>
+            Much slower conversion speed and smaller output file size.
+            </summary>
+        </member>
+        <member name="T:YoutubeExplode.Converter.IYoutubeConverter">
+            <summary>
+            Interface for <see cref="T:YoutubeExplode.Converter.YoutubeConverter"/>.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.IYoutubeConverter.DownloadAndProcessMediaStreamsAsync(System.Collections.Generic.IReadOnlyList{YoutubeExplode.Videos.Streams.IStreamInfo},System.String,System.String,YoutubeExplode.Converter.ConversionPreset,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads given media streams and processes them into a file using specified format.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.IYoutubeConverter.DownloadVideoAsync(YoutubeExplode.Videos.Streams.StreamManifest,System.String,System.String,YoutubeExplode.Converter.ConversionPreset,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads a video to a file using specified format by selecting media streams from the given set.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.IYoutubeConverter.DownloadVideoAsync(System.String,System.String,System.String,YoutubeExplode.Converter.ConversionPreset,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads a video to a file using specified format.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.IYoutubeConverter.DownloadVideoAsync(System.String,System.String,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads a video to a file using specified format.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.IYoutubeConverter.DownloadVideoAsync(System.String,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads a video to a file.
+            </summary>
+        </member>
+        <member name="T:YoutubeExplode.Converter.YoutubeConverter">
+            <summary>
+            The entry point for <see cref="N:YoutubeExplode.Converter"/>.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.YoutubeConverter.#ctor(YoutubeExplode.YoutubeClient,System.String)">
+            <summary>
+            Creates an instance of <see cref="T:YoutubeExplode.Converter.YoutubeConverter"/>.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.YoutubeConverter.#ctor(YoutubeExplode.YoutubeClient)">
+            <summary>
+            Creates an instance of <see cref="T:YoutubeExplode.Converter.YoutubeConverter"/>.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.YoutubeConverter.#ctor">
+            <summary>
+            Creates an instance of <see cref="T:YoutubeExplode.Converter.YoutubeConverter"/>.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.YoutubeConverter.DownloadAndProcessMediaStreamsAsync(System.Collections.Generic.IReadOnlyList{YoutubeExplode.Videos.Streams.IStreamInfo},System.String,System.String,YoutubeExplode.Converter.ConversionPreset,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:YoutubeExplode.Converter.YoutubeConverter.DownloadVideoAsync(YoutubeExplode.Videos.Streams.StreamManifest,System.String,System.String,YoutubeExplode.Converter.ConversionPreset,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:YoutubeExplode.Converter.YoutubeConverter.DownloadVideoAsync(System.String,System.String,System.String,YoutubeExplode.Converter.ConversionPreset,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:YoutubeExplode.Converter.YoutubeConverter.DownloadVideoAsync(System.String,System.String,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:YoutubeExplode.Converter.YoutubeConverter.DownloadVideoAsync(System.String,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
