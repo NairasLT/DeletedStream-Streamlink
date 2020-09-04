@@ -62,3 +62,4 @@ C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Debug\Microsoft.WindowsAPICodePack.She
 C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
 C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Debug\Microsoft.WindowsAPICodePack.ShellExtensions.pdb
 C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Debug\Microsoft.WindowsAPICodePack.ShellExtensions.xml
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Debug\MimeTypesMap.dll

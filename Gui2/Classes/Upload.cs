@@ -52,13 +52,31 @@ namespace Gui2.Classes
                 var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
                 videosInsertRequest.ResponseReceived += async (Video) =>
                 {
-                    await SetThumbnail(Video.Id,s.Files.ThumbnailPath); //
-                    Console.WriteLine("Video id '{0}' was successfully uploaded.", Video.Id);
+                    await SetThumbnail(Video.Id,s.Files.ThumbnailPath);
                 };
                 await videosInsertRequest.UploadAsync();
                 fileStream.Dispose();
             }
         }
+        public async Task Start(string Title, string Desctiption, string VideoPath)
+        {
+            var video = new Video();
+            video.Snippet = new VideoSnippet();
+            video.Snippet.Title =Title;
+            video.Snippet.Description = Desctiption;
+            video.Snippet.Tags = new string[] { "" };
+            video.Snippet.CategoryId = "22";
+            video.Status = new VideoStatus();
+            video.Status.PrivacyStatus = "unlisted";
+            var filePath = VideoPath;
+            using (var fileStream = new FileStream(filePath, FileMode.Open))
+            {
+                var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
+                await videosInsertRequest.UploadAsync();
+                fileStream.Dispose();
+            }
+        }
+
 
         /// <summary>
         /// Only Jpeg, files are supported, changing file extension to png or else dosent work you need to save as png!

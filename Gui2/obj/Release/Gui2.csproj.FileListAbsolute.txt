@@ -53,3 +53,13 @@ C:\Users\Nojus\source\repos\Gui2\Gui2\obj\Release\Gui2.csproj.CoreCompileInputs.
 C:\Users\Nojus\source\repos\Gui2\Gui2\obj\Release\Gui2.csproj.CopyComplete
 C:\Users\Nojus\source\repos\Gui2\Gui2\obj\Release\Gui2.exe
 C:\Users\Nojus\source\repos\Gui2\Gui2\obj\Release\Gui2.pdb
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.dll
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.ShellExtensions.dll
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\MimeTypesMap.dll
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.pdb
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.xml
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.Shell.xml
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.ShellExtensions.pdb
+C:\Users\Nojus\source\repos\Gui2\Gui2\bin\Release\Microsoft.WindowsAPICodePack.ShellExtensions.xml

@@ -14,6 +14,9 @@ using System.Collections.Generic;
 using Gui2.Helpers;
 using System.Media;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Threading;
+using System.Net;
+using System.Runtime.Remoting.Messaging;
 
 namespace Gui2
 {
@@ -28,12 +31,19 @@ namespace Gui2
             ConfigGrid.Visibility = Visibility.Hidden;
             PathsGrid.Visibility = Visibility.Hidden;
             LocalFilesSetup();
-
-            new client().Client();
+            new client(CurrentList).Start();
         }
+
+
+
+
+
+
+
+
+
+        //GUI
         ActiveTopWindow topWindow = ActiveTopWindow.MainWindow;
-
-
         public void ShowConfigWindow()
         {
             switch (topWindow)
@@ -90,7 +100,7 @@ namespace Gui2
             try
             {
                 var cfg = new ConfigSys(LocalData);
-                var save = cfg.ReadInfo();
+                var save = cfg.Read();
 
                 if (save == new SaveInfo())
                     return;
@@ -102,7 +112,7 @@ namespace Gui2
 
                 foreach (Streamer streamer in save.Streamers)
                 {
-                    ViewIds.Items.Add($"{streamer.Website} : {streamer.MinuteInterval}");
+                    ViewIds.Items.Add($"{streamer.Website}");
                 }
             } catch(Exception) { MessageBox.Show($"Error occurred did you enter Interval in minutes?"); }
         }
@@ -175,7 +185,13 @@ namespace Gui2
 
         private void ViewIds_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Something
+
+            if (ViewIds == null)
+                return;
+
+            if (ViewIds.SelectedItem == null)
+                return;
+            ChannelId.Text = ViewIds.SelectedItem.ToString();
         }
 
 
@@ -278,25 +294,27 @@ namespace Gui2
 
         private async void AuthenticateApi_Click(object sender, RoutedEventArgs e)
         {
+            var cfg = new ConfigSys(LocalData);
             try
             {
-                var obj = new Upload(ClientSecretsFolder + "client_secrets.json", "user");
+                var obj = new Upload(ClientSecretsFolder + cfg.Read().settings.Clientsecrets, "user");
                 await obj.Init();
                 MessageBox.Show("Authenticated!");
             }
             catch (Exception x) { MessageBox.Show($"Failled to authenticate: {x.Message}"); }
 
         }
-
+        //PATHS GRID <-----
         private void SavePath_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(StreamSaveFolderTextBox.Text)
-                || StreamSaveFolderTextBox.Text == "Local Folder")
-                return;
-
             var cfg = new ConfigSys(LocalData);
-            cfg.SetSavePath(StreamSaveFolderTextBox.Text);
-            cfg.SetSecretsFilename(ClientSecretsTextBox.Text);
+            SaveInfo CurrentSave = cfg.Read();
+            CurrentSave.settings.StreamsFolder = StreamSaveFolderTextBox.Text;
+            CurrentSave.settings.Clientsecrets = ClientSecretsTextBox.Text;
+            CurrentSave.settings.Uploading = (bool)UploadingCheckBox.IsChecked;
+            if (cfg.Set(CurrentSave))
+                MessageBox.Show("Successfully updated Configuration.");
+
         }
 
         private void StreamSaveFolderTextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -312,9 +330,43 @@ namespace Gui2
 
         private void PathsGrid_Loaded(object sender, RoutedEventArgs e)
         {
+            RefreshPaths();
+        }
+
+        public void RefreshPaths()
+        {
             var cfg = new ConfigSys(LocalData);
-            StreamSaveFolderTextBox.Text = cfg.ReadInfo().settings.Streams_Save_Folder;
-            ClientSecretsTextBox.Text = cfg.ReadInfo().settings.Client_Secrets;
+            var CurrentSave = cfg.Read();
+            StreamSaveFolderTextBox.Text = CurrentSave.settings.StreamsFolder;
+            ClientSecretsTextBox.Text = CurrentSave.settings.Clientsecrets;
+            UploadingCheckBox.IsChecked = CurrentSave.settings.Uploading;
+        }
+        private void ResetPaths_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure you want Reset the configuration?", "", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.No)
+                return;
+
+            var cfg = new ConfigSys(LocalData);
+            SaveInfo save = cfg.Read();
+            save.settings.StreamsFolder = "Local Folder";
+            save.settings.Clientsecrets = "client_secrets.json";
+            save.settings.Uploading = false;
+            if (cfg.Set(save))
+            {
+                MessageBox.Show("Configuration was Successfully Reset.");
+                RefreshPaths();
+            }
+        }
+
+        private void UploadingCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ClientSecretsTextBox.IsEnabled = true;
+        }
+
+        private void UploadingCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ClientSecretsTextBox.IsEnabled = false;
         }
     }
 }

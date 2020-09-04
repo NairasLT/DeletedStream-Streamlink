@@ -45,7 +45,7 @@ namespace Gui2.Classes
             if (File.Exists(ConfigPath))
                 File.Delete(ConfigPath);
         }
-        public SaveInfo ReadInfo()
+        public SaveInfo Read()
         {
             try
             {
@@ -53,30 +53,11 @@ namespace Gui2.Classes
             }
             catch (Exception x) { MessageBox.Show($"Exception occurred: {x.Message}"); return new SaveInfo(); }
         }
-
-
-        public bool SetSavePath(string Path)
+        public bool Set(SaveInfo info)
         {
             try
             {
-                var current = ReadInfo();
-                current.settings.Streams_Save_Folder = Path;
-                string Serialize = JsonConvert.SerializeObject(current);
-                File.WriteAllText(ConfigPath, Serialize);
-                return true;
-            }
-            catch(Exception) { return false; }
-        }
-
-
-        public bool SetSecretsFilename(string Name)
-        {
-            try
-            {
-                var current = ReadInfo();
-                current.settings.Client_Secrets = Name;
-                string Serialize = JsonConvert.SerializeObject(current);
-                File.WriteAllText(ConfigPath, Serialize);
+                File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(info));
                 return true;
             }
             catch (Exception) { return false; }

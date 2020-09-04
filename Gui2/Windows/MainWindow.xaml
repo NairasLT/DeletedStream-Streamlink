@@ -12,7 +12,7 @@
             <Grid.Effect>
                 <BlurEffect Radius="0"/>
             </Grid.Effect>
-            <ListBox x:Name="CurrentList" HorizontalAlignment="Left" Height="240" Margin="11,52,0,0" VerticalAlignment="Top" Width="438" Grid.ColumnSpan="2">
+            <ListBox x:Name="CurrentList" x:FieldModifier="public" HorizontalAlignment="Left" Height="240" Margin="11,52,0,0" VerticalAlignment="Top" Width="438" Grid.ColumnSpan="2">
                 <ListBox.Effect>
                     <DropShadowEffect Opacity="0.45" RenderingBias="Quality"/>
                 </ListBox.Effect>
@@ -44,7 +44,7 @@
                 <ListBoxItem Content="Other" FontFamily="/Gui2;component/Other/#Roboto"/>
             </ComboBox>
         </Grid>
-        <Grid x:Name="PathsGrid"  x:FieldModifier="public" Margin="0,83,116,0" HorizontalAlignment="Right" Width="399" ClipToBounds="True" Panel.ZIndex="2" Height="233" VerticalAlignment="Top" Loaded="PathsGrid_Loaded">
+        <Grid x:Name="PathsGrid"  x:FieldModifier="public" Margin="0,83,116,0" HorizontalAlignment="Right" Width="399" ClipToBounds="True" Panel.ZIndex="2" Height="233" VerticalAlignment="Top" Loaded="PathsGrid_Loaded" d:IsHidden="True">
             <Label Content="Paths Manager" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="/Gui2;component/Other/#Roboto" Height="29" Width="181" FontSize="16" Margin="111,16,0,0" HorizontalContentAlignment="Center"/>
             <TextBox x:Name="Close_Path" HorizontalAlignment="Right" Height="30" Margin="0,0,0,203" TextWrapping="Wrap" Text="___" VerticalAlignment="Center" Width="30" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" Cursor="Hand" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" GotFocus="Close_Path_GotFocus"/>
             <Button x:Name="Reset1" Content="Reset" HorizontalAlignment="Left" Margin="352,250,0,0" VerticalAlignment="Top" Width="75" Click="Reset_Click"/>
@@ -59,7 +59,9 @@
             </Rectangle>
             <TextBox x:Name="StreamSaveFolderTextBox" HorizontalAlignment="Left" Height="24" Margin="159,59,0,0" TextWrapping="Wrap" Text="Local Folder" VerticalAlignment="Top" Width="230" VerticalContentAlignment="Center" GotFocus="StreamSaveFolderTextBox_GotFocus" HorizontalContentAlignment="Center"/>
             <TextBox x:Name="ClientSecretsTextBox" HorizontalAlignment="Left" Height="23" Margin="159,146,0,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top" Width="230" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-            <TextBox x:Name="StreamlinkPathTextBox" HorizontalAlignment="Left" Height="23" Margin="159,104,0,0" TextWrapping="Wrap" Text="Default Path" VerticalAlignment="Top" Width="230" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True" IsEnabled="False"/>
+            <TextBox x:Name="StreamlinkPathTextBox" HorizontalAlignment="Left" Height="23" Margin="159,104,0,0" TextWrapping="Wrap" Text="Default Installation Path" VerticalAlignment="Top" Width="230" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True" IsEnabled="False"/>
+            <CheckBox x:Name="UploadingCheckBox" Content="Auto Uploading to YouTube" HorizontalAlignment="Left" Margin="13,190,0,0" VerticalAlignment="Top" FlowDirection="RightToLeft" FontFamily="/Gui2;component/Other/#Roboto" Width="167" Unchecked="UploadingCheckBox_Unchecked" Checked="UploadingCheckBox_Checked"/>
+            <Button x:Name="ResetPaths" Content="Reset" Margin="0,198,107,0" HorizontalAlignment="Right" Width="71" Height="25" VerticalAlignment="Top" Click="ResetPaths_Click"/>
         </Grid>
     </Grid>
 </Window>

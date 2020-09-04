@@ -11,7 +11,9 @@ namespace Gui2.Helpers
 {
     class ClientHelper
     {
-
-
+        public static string WinFileNameRestrict(string Input)
+        {
+            return Input.Replace('*', ' ').Replace('<', ' ').Replace('>', ' ').Replace(':', ' ').Replace('\"', ' ').Replace('\\', ' ').Replace('/', ' ').Replace('|', ' ').Replace('?', ' ');
+        }
     }
 }

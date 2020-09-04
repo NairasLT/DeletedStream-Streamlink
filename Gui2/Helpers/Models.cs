@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Gui2.Helpers.ClientHelper;
 using YoutubeExplode.Videos;
 
 namespace Gui2.Helpers
@@ -53,8 +54,9 @@ namespace Gui2.Helpers
 
     class Settings
     {
-        public string Client_Secrets = "client_secrets.json";
-        public string Streams_Save_Folder = "Local Folder";
+        public string Clientsecrets = "client_secrets.json";
+        public string StreamsFolder = "Local Folder";
+        public bool Uploading = false;
     }
 
     public enum StreamerPlatform
@@ -79,4 +81,22 @@ namespace Gui2.Helpers
         Success,
         Fail
     }
+
+    public class FileNamePurify
+    {
+        public string StreamPath { get; set; }
+        public string ThumbnailPath { get; set; }
+        public string StreamInfoPath { get; set; }
+        public FileNamePurify(string Thumb, string StrmInfo, string SaveLocation, Video metadata)
+        {
+            StreamPath = $"{SaveLocation}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)}.mp4";
+            ThumbnailPath = $"{Thumb}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)}.jpeg";
+            StreamInfoPath = $"{StrmInfo}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)}.streaminfo";
+        }
+
+
+
+
+    }
+
 }

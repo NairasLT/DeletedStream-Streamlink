@@ -13,17 +13,22 @@ namespace Gui2.Helpers
     {
         public static async Task<JsonDecodeResult> BroadcastIdFromChannelId(string ChannelId)
         {
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync($"https://www.youtube.com/embed/live_stream?channel={ChannelId}&pbj=1", HttpCompletionOption.ResponseContentRead);
-            string responsestring = await response.Content.ReadAsStringAsync();
-            JsonDecodeResult decodeResult = JsonDecode(responsestring, "<script >yt.setConfig(", ");yt.setConfig({");
+            try
+            {
+                HttpClient client = new HttpClient();
+                var response = await client.GetAsync($"https://www.youtube.com/embed/live_stream?channel={ChannelId}&pbj=1", HttpCompletionOption.ResponseContentRead);
+                string responsestring = await response.Content.ReadAsStringAsync();
+                JsonDecodeResult decodeResult = JsonDecode(responsestring, "<script >yt.setConfig(", ");yt.setConfig({");
 
-            if (decodeResult.ResultStatus == Status.Fail)
-                return new JsonDecodeResult(null, Status.Fail);
+                if (decodeResult.ResultStatus == Status.Fail)
+                    return new JsonDecodeResult(null, Status.Fail);
 
-            ResponseRoot YoutubeResponse = JsonConvert.DeserializeObject<ResponseRoot>(decodeResult.Result);
+                ResponseRoot YoutubeResponse = JsonConvert.DeserializeObject<ResponseRoot>(decodeResult.Result);
 
-            return new JsonDecodeResult(YoutubeResponse.VIDEO_ID, Status.Success);
+                return new JsonDecodeResult(YoutubeResponse.VIDEO_ID, Status.Success);
+            }
+            catch (Exception x) { Console.WriteLine($"Exception Id From Channel {x.Message}"); return new JsonDecodeResult(null, Status.Fail); }
+
         }
 
         public static JsonDecodeResult JsonDecode(string HtmlString, string Start, string End)
