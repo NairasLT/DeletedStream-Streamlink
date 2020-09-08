@@ -37,26 +37,30 @@ namespace Gui2.Classes
 
         public async Task Start(SavedVideo s)
         {
-            var video = new Video();
-            video.Snippet = new VideoSnippet();
-            video.Snippet.Title = s.YouTubeManifest.Title;
-            video.Snippet.Description = s.YouTubeManifest.Description;
-            video.Snippet.Tags = new string[] {""};
-            video.Snippet.CategoryId = "22";
-            video.Status = new VideoStatus();
-            video.Status.PrivacyStatus = "unlisted";
-            var filePath = s.Files.VideoPath;
-
-            using (var fileStream = new FileStream(filePath, FileMode.Open))
+            try
             {
-                var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
-                videosInsertRequest.ResponseReceived += async (Video) =>
+                var video = new Video();
+                video.Snippet = new VideoSnippet();
+                video.Snippet.Title = s.YouTubeManifest.Title;
+                video.Snippet.Description = s.YouTubeManifest.Description;
+                video.Snippet.Tags = new string[] { "" };
+                video.Snippet.CategoryId = "22";
+                video.Status = new VideoStatus();
+                video.Status.PrivacyStatus = "unlisted";
+                var filePath = s.Files.VideoPath;
+
+                using (var fileStream = new FileStream(filePath, FileMode.Open))
                 {
-                    await SetThumbnail(Video.Id,s.Files.ThumbnailPath);
-                };
-                await videosInsertRequest.UploadAsync();
-                fileStream.Dispose();
+                    var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
+                    videosInsertRequest.ResponseReceived += async (Video) =>
+                    {
+                        await SetThumbnail(Video.Id, s.Files.ThumbnailPath);
+                    };
+                    await videosInsertRequest.UploadAsync();
+                    fileStream.Dispose();
+                }
             }
+            catch (Exception) { }
         }
         public async Task Start(string Title, string Desctiption, string VideoPath)
         {

@@ -17,6 +17,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Threading;
 using System.Net;
 using System.Runtime.Remoting.Messaging;
+using YoutubeExplode.Videos;
 
 namespace Gui2
 {

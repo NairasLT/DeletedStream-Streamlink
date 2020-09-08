@@ -19,8 +19,8 @@
             </ListBox>
             <Label Content="Currently Streaming" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Height="37" Width="147" FontSize="14" FontFamily="/Gui2;component/Other/#Roboto" BorderThickness="0"/>
             <Button x:Name="Configbtn" Content="Config" HorizontalAlignment="Left" Margin="358,306,0,0" VerticalAlignment="Top" Width="91" Height="29" Click="Configbtn_Click"/>
-            <Button x:Name="ShowPaths" Content="Paths" HorizontalAlignment="Left" Margin="255,306,0,0" VerticalAlignment="Top" Width="87" Height="30" Click="ShowPaths_Click"/>
-            <Button x:Name="AuthenticateApi" Content="Authenticate API" HorizontalAlignment="Left" Margin="127,306,0,0" VerticalAlignment="Top" Width="113" Height="30" Click="AuthenticateApi_Click"/>
+            <Button x:Name="ShowPaths" Content="Paths" HorizontalAlignment="Left" Margin="272,305,0,0" VerticalAlignment="Top" Width="78" Height="30" Click="ShowPaths_Click"/>
+            <Button x:Name="AuthenticateApi" Content="Authenticate API" HorizontalAlignment="Left" Margin="151,305,0,0" VerticalAlignment="Top" Width="113" Height="30" Click="AuthenticateApi_Click"/>
         </Grid>
         <Grid x:Name="ConfigGrid"  x:FieldModifier="public" Margin="125,83,92,90" Height="212" VerticalAlignment="Center" HorizontalAlignment="Center" Width="411" ClipToBounds="True" Panel.ZIndex="2" d:IsHidden="True">
             <Button x:Name="AddId" x:FieldModifier="public" Content="Add" HorizontalAlignment="Left" Margin="121,162,0,0" VerticalAlignment="Top" Width="75" Click="AddId_Click"/>
