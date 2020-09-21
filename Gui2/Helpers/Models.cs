@@ -89,9 +89,10 @@ namespace Gui2.Helpers
         public string StreamInfoPath { get; set; }
         public FileNamePurify(string Thumb, string StrmInfo, string SaveLocation, Video metadata)
         {
-            StreamPath = $"{SaveLocation}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)}.mp4";
-            ThumbnailPath = $"{Thumb}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)}.jpeg";
-            StreamInfoPath = $"{StrmInfo}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)}.streaminfo";
+            string Hash = WinFileNameRestrict(DateTime.Now.Ticks.GetHashCode().ToString());
+            StreamPath = $"{SaveLocation}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)} {Hash}.mp4";
+            ThumbnailPath = $"{Thumb}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)} {Hash}.jpeg";
+            StreamInfoPath = $"{StrmInfo}{WinFileNameRestrict(metadata.Title)} {WinFileNameRestrict(metadata.Id)} {Hash}.streaminfo";
         }
 
 
