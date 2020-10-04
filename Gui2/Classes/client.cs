@@ -34,7 +34,7 @@ namespace Gui2.Classes
             streaming = new CurrentlyStreaming(CurrentlyStreamingDisplay);
         }
         CurrentlyStreaming streaming;
-        public async Task Start()
+        public void Start()
         {
             var cfg = new ConfigSys(LocalData);
 
@@ -54,7 +54,7 @@ namespace Gui2.Classes
             }
         }
 
-        private async Task StartStreamer(Streamer streamer, string SavePath, string SecretsName)
+        private async void StartStreamer(Streamer streamer, string SavePath, string SecretsName)
         {
             YoutubeClient youtubeClient = new YoutubeClient();
             Console.WriteLine($"Started {streamer.Website}");
