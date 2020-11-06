@@ -50,11 +50,11 @@ namespace Gui2.Classes
                     Thread thr = new Thread(() => StartStreamer(streamer, save.settings.StreamsFolder, save.settings.Clientsecrets));
                     thr.Start();
                 }
-                catch(Exception x) { MessageBox.Show($"Error starting Streamer {streamer.Website} Thread, Are paths correctly set?\n{x.Message}"); }
+                catch (Exception x) { MessageBox.Show($"Error starting Streamer {streamer.Website} Thread, Are paths correctly set?\n{x.Message}"); }
             }
         }
 
-        private async void StartStreamer(Streamer streamer, string SavePath, string SecretsName)
+        private void StartStreamer(Streamer streamer, string SavePath, string SecretsName)
         {
             YoutubeClient youtubeClient = new YoutubeClient();
             Console.WriteLine($"Started {streamer.Website}");
@@ -63,24 +63,24 @@ namespace Gui2.Classes
                 int delay = (int)TimeSpan.FromMinutes(streamer.MinuteInterval).TotalMilliseconds;
 
                 var cfg = new ConfigSys(LocalData);
-                if(streamer.platform == StreamerPlatform.YouTube)
+                if (streamer.platform == StreamerPlatform.YouTube)
                 {
-                    var Result = await BroadcastIdFromChannelId(streamer.Website);
+                    var Result = BroadcastIdFromChannelId(streamer.Website).Result;
 
                     if (Result.ResultStatus == Status.Fail || Result.Result == "live_stream" || Result.Result == null)
                     {
-                        await Task.Delay(delay);
+                        Thread.Sleep(delay);
                         continue;
                     }
 
                     if (Result.ResultStatus == Status.Success) //Id not link
                     {
-                        var metadata = await youtubeClient.Videos.GetAsync(Result.Result); //Video title, etc.
+                        var metadata = youtubeClient.Videos.GetAsync(Result.Result).Result; //Video title, etc.
 
                         var FileNames = new FileNamePurify(ThumbnailsFolder, StreamManifestFolder, SavePath, metadata);
 
-                        await new WebClient().DownloadFileTaskAsync(metadata.Thumbnails.MaxResUrl, FileNames.ThumbnailPath); //Idk fucks up 
-                        await StreamlinkDownloadStream(FileNames.StreamPath, $"https://www.youtube.com/channel/{streamer.Website}/live");
+                        new WebClient().DownloadFile(metadata.Thumbnails.MaxResUrl, FileNames.ThumbnailPath); //Idk fucks up 
+                        StreamlinkDownloadStream(FileNames.StreamPath, $"https://www.youtube.com/channel/{streamer.Website}/live").Wait();
                         SavedVideo svi = new SavedVideo(metadata, FileNames.StreamPath, FileNames.ThumbnailPath, false, StreamerPlatform.YouTube);
                         File.WriteAllText(FileNames.StreamInfoPath, JsonConvert.SerializeObject(svi));
 
@@ -95,16 +95,14 @@ namespace Gui2.Classes
                     string StreamPath = $"{SavePath}{DateTime.Now.Year} {DateTime.Now.Month} {DateTime.Now.Day} [{DateTime.Now.Hour} Hour {DateTime.Now.Minute} min {DateTime.Now.Second} s].mp4";
                     string StreamInfoPath = $"{StreamManifestFolder}\\{DateTime.Now.Year} {DateTime.Now.Month} {DateTime.Now.Day} [{DateTime.Now.Hour} Hour {DateTime.Now.Minute} min {DateTime.Now.Second} s].streaminfo";
                     string Title = $"{DateTime.Now.Year} {DateTime.Now.Month} {DateTime.Now.Day} [{DateTime.Now.Hour} Hour {DateTime.Now.Minute} min {DateTime.Now.Second} s]";
-                    await StreamlinkDownloadStream(StreamPath, streamer.Website);
+                    StreamlinkDownloadStream(StreamPath, streamer.Website).RunSynchronously();
                     File.WriteAllText(StreamInfoPath, JsonConvert.SerializeObject(new SavedVideo(null, StreamPath, null, false, StreamerPlatform.Other)));
 
                     if (cfg.Read().settings.Uploading)
-                    {
                         YouTubeUploadStartThread(SecretsName, Title, string.Empty, StreamPath);
-                    }
                 }
 
-                await Task.Delay(delay);
+                Thread.Sleep(delay);
             }
         }
 
@@ -114,16 +112,17 @@ namespace Gui2.Classes
 
         public void YouTubeUploadStartThread(string SecretsName, string Title, string Description, string Path)
         {
-            new Thread(async() => {
+            new Thread(() =>
+            {
                 try
                 {
                     var upl = new Upload(ClientSecretsFolder + SecretsName, "user");
-                    await upl.Init();
-                    await upl.Start(Title, Description, Path);
+                    upl.Init().Wait();
+                    upl.Start(Title, Description, Path).Wait();
                 }
                 catch (Exception)
                 {
-                    await Task.Delay(TimeSpan.FromHours(2));
+                    Task.Delay(TimeSpan.FromHours(2));
                     YouTubeUploadStartThread(SecretsName, Title, Description, Path);
                 }
             }).Start();
@@ -131,17 +130,17 @@ namespace Gui2.Classes
         }
         public void YouTubeUploadStartThread(SavedVideo Meta, string SecretsName)
         {
-            new Thread(async () =>
+            new Thread(() =>
             {
                 try
                 {
                     var upl = new Upload(ClientSecretsFolder + SecretsName, "user");
-                    await upl.Init();
-                    await upl.Start(Meta);
+                    upl.Init().Wait();
+                    upl.Start(Meta).Wait();
                 }
                 catch (Exception)
                 {
-                    await Task.Delay(TimeSpan.FromHours(2));
+                    Thread.Sleep(TimeSpan.FromHours(2));
                     YouTubeUploadStartThread(Meta, SecretsName);
                 }
             }).Start();

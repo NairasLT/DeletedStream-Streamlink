@@ -19,7 +19,7 @@ namespace Gui2.Helpers
                 client.Timeout = TimeSpan.FromSeconds(60);
                 var response = await client.GetAsync($"https://www.youtube.com/embed/live_stream?channel={ChannelId}&pbj=1", HttpCompletionOption.ResponseContentRead);
                 string responsestring = await response.Content.ReadAsStringAsync();
-                JsonDecodeResult decodeResult = JsonDecode(responsestring, "<script >yt.setConfig(", ");yt.setConfig({");
+                JsonDecodeResult decodeResult = JsonDecode(responsestring, "<script >yt.setConfig(", ");writeEmbed();</script>");
 
                 if (decodeResult.ResultStatus == Status.Fail)
                     return new JsonDecodeResult(null, Status.Fail);
