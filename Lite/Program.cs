@@ -21,7 +21,12 @@ namespace Lite
 
             var cfg = new Config<ConfigFile>(FilePaths.ConfigFile);
             cfg.Create(new ConfigFile()); //how to access the T char in config class so i dont need to do this?
-            new Upload(FilePaths.SecretsFile).Init().Wait();
+
+            string SecretsFileText = File.ReadAllText(FilePaths.SecretsFile);
+
+            if (SecretsFileText != FilePaths.SecretsFileDefaultText || SecretsFileText.Length > FilePaths.SecretsFileDefaultText.Length)
+                new Upload(FilePaths.SecretsFile).Init().Wait();
+            else { Console.WriteLine("YouTube API, client_secrets.json File is empty! Press any key to Exit."); Console.ReadLine(); return; }
 
             var Filecontent = cfg.Read();
 

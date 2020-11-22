@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
@@ -23,6 +22,14 @@ namespace Lite
 
     class ConfigFile
     {
+        public ConfigFile(List<Channel> channels)
+        {
+            Channels = channels;
+        }
+        public ConfigFile()
+        {
+        }
+
         public List<Channel> Channels = new List<Channel>();
     }
     public class Name
@@ -39,14 +46,14 @@ namespace Lite
         private static string LivestreamsFolder = $"{Directory.GetCurrentDirectory()}\\Livestreams\\";
         private static string SecretsFolder = $"{Directory.GetCurrentDirectory()}\\Secrets\\";
         private static string ConfigFolder = $"{Directory.GetCurrentDirectory()}\\Config\\";
-
+        public static string SecretsFileDefaultText = "Replace this file With your YouTube Api Oauth secrets file.";
         public static string ConfigFile = $"{ConfigFolder}Config.json";
         public static string SecretsFile = $"{SecretsFolder}client_secrets.json";
         public static void Setup()
         {
             CheckFilesystem(new string[] { ThumbnailFolder, LivestreamsFolder, SecretsFolder, ConfigFolder}, true);
-            CheckFilesystem(new string[] { SecretsFile }, false);
-
+            CheckFile(SecretsFile, SecretsFileDefaultText);
+            CheckConfigFile();
         }
         private static void CheckFilesystem(string[] Paths, bool IsDirectory)
         {
@@ -58,6 +65,24 @@ namespace Lite
                 foreach (var Path in Paths)
                     if (!File.Exists(Path)) File.Create(Path);
         }
+
+        private static void CheckConfigFile()
+        {
+            if (!File.Exists(SecretsFile))
+            {
+                List<Channel> temp = new List<Channel>(); temp.Add(new Channel("Enter Here YouTube Channel Id Example: UCSIKKd_AkoV3c4F5CI4JAnQ", 6));
+                ConfigFile tempfile = new ConfigFile(temp);
+                File.WriteAllText(SecretsFile, JsonConvert.SerializeObject(tempfile));
+            }
+        }
+
+        private static void CheckFile(string Path, string Content)
+        {
+            if (!File.Exists(Path))
+                File.WriteAllText(SecretsFile, Content);
+        }
+
+
 
         public static string GetThumbnailPath(string Filename)
         {
