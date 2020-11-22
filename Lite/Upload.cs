@@ -125,7 +125,7 @@ class Upload
             var file = service.Thumbnails.Set(videoid, fs, $"image/jpeg");
             await file.UploadAsync();
             fs.Dispose();
-            Console.WriteLine("\n\nUploaded!\n\n");
+            Console.WriteLine($"-=-=-=-=-=- Uploaded: {videoid} -=-=-=-=-=-");
         }
         catch (Exception) { Console.WriteLine("Error Setting Thumbnail!"); }
     }
