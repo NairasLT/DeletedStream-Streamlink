@@ -42,7 +42,7 @@ class Upload
             video.Snippet.Tags = new string[] { "" };
             video.Snippet.CategoryId = "22";
             video.Status = new VideoStatus();
-            video.Status.PrivacyStatus = "private";
+            video.Status.PrivacyStatus = "unlisted";
             var filePath = livestream.LivestreamPath;
 
             using (var fileStream = new FileStream(filePath, FileMode.Open))
@@ -78,11 +78,14 @@ class Upload
             using (var fileStream = new FileStream(filePath, FileMode.Open))
             {
                 var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
+
                 videosInsertRequest.ResponseReceived += async (Video) =>
                 {
-                    await SetThumbnail(Video.Id, livestream.ThumbnailPath);
+                    if (File.Exists(livestream.ThumbnailPath))
+                        await SetThumbnail(Video.Id, livestream.ThumbnailPath);
                 };
                 await videosInsertRequest.UploadAsync();
+                Console.WriteLine($"Uploaded Video {video.Id}");
                 fileStream.Dispose();
             }
         }
@@ -125,7 +128,7 @@ class Upload
             var file = service.Thumbnails.Set(videoid, fs, $"image/jpeg");
             await file.UploadAsync();
             fs.Dispose();
-            Console.WriteLine($"-=-=-=-=-=- Uploaded: {videoid} -=-=-=-=-=-");
+            Console.WriteLine($"Thumbnail set for video: {videoid}");
         }
         catch (Exception) { Console.WriteLine("Error Setting Thumbnail!"); }
     }
