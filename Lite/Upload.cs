@@ -10,7 +10,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Lite;
 class Upload
 {
     YouTubeService service;
@@ -96,6 +95,37 @@ class Upload
             _ = CreateWithRetry(livestream, RetryTimeout);
         }
     }
+    public async Task CreateWithRetry(string Title, string Description, string Path, TimeSpan timeout)
+    {
+        try
+        {
+            var video = new Video();
+            video.Snippet = new VideoSnippet();
+            video.Snippet.Title = Title;
+            video.Snippet.Description = Description;
+            video.Snippet.Tags = new string[] { "" };
+            video.Snippet.CategoryId = "22";
+            video.Status = new VideoStatus();
+            video.Status.PrivacyStatus = "private";
+            var filePath = Path;
+
+            using (var fileStream = new FileStream(filePath, FileMode.Open))
+            {
+                var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
+                await videosInsertRequest.UploadAsync();
+                Console.WriteLine($"Uploaded Video {video.Id}");
+                fileStream.Dispose();
+            }
+        }
+        catch (Exception x)
+        {
+            Console.WriteLine($"Error Uploaded most likely exeeded quota limit {x.Message}   Retrying...");
+            await Task.Delay(timeout);
+            _ = CreateWithRetry(Title, Description, Path, timeout);
+        }
+    }
+
+
     public async Task Start(string title, string description, string path)
     {
         var video = new Video();

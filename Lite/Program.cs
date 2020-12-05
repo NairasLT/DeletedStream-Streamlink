@@ -8,39 +8,66 @@ using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 
-namespace Lite
+class Program
 {
-    class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+        FilePaths.Setup();
+        Console.WriteLine(FilePaths.ConfigFile);
+        var cfg = new Config<ConfigFile>(FilePaths.ConfigFile);
+        var Filecontent = cfg.Read();
+
+        if (Filecontent == null)
+            return;
+
+        foreach (var user in Filecontent.Channels)
         {
-            FilePaths.Setup();
-            Console.WriteLine(FilePaths.ConfigFile);
-            var cfg = new Config<ConfigFile>(FilePaths.ConfigFile);
-            var Filecontent = cfg.Read();
+            if (user.ChannelId == FilePaths.ConfigExampleText) // TODO: Add Class for the console text.
+            {
+                ConsoleHelpers.ShowConfigureChannels();
+                return;
+            }
 
-            if (Filecontent != null)
-                foreach (var user in Filecontent.Channels)
-                {
-                    if(user.ChannelId == FilePaths.ConfigExampleText)
-                    {
-                        Console.BackgroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Please configure the youtube channels, and remove the Example Object.");
-                        Console.ResetColor();
-                        Console.WriteLine("Press Enter key to Exit.");
-                        Console.ReadLine();
-                        return;
-                    }
+            ConsoleHelpers.ShowStartedChannel(user);
 
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine($"Started [{user.ChannelId}] with {user.MinutesTimeOut} minute Timeout.");
-                    Console.ResetColor();
+
+            switch (user.Platform)
+            {
+                case Platform.YouTube:
                     var Runtime = new ActiveChannel(user.ChannelId, TimeSpan.FromMinutes(user.MinutesTimeOut));
                     _ = Runtime.Run();
-                }
+                    break;
 
-            Console.ReadLine();
+                case Platform.Trovo:
+                    var trovo = new TrovoStreamer(user.ChannelId, TimeSpan.FromMinutes(user.MinutesTimeOut));
+                    _ = trovo.BeginLoop();
+                    break;
+            }
         }
+
+        while (true)
+            Console.ReadLine();
     }
 }
+
+public static class ConsoleHelpers
+{
+    public static void ShowConfigureChannels()
+    {
+        Console.BackgroundColor = ConsoleColor.Red;
+        Console.WriteLine("Please configure the Streamer Channels, and remove the Example Object.");
+        Console.ResetColor();
+        Console.WriteLine("Press Enter key to Exit.");
+        Console.ReadLine();
+    }
+
+    public static void ShowStartedChannel(Channel user)
+    {
+        Console.BackgroundColor = ConsoleColor.Yellow;
+        Console.ForegroundColor = ConsoleColor.Black;
+        Console.WriteLine($"Started [{user.ChannelId}] with {user.MinutesTimeOut} minute Timeout.");
+        Console.ResetColor();
+    }
+
+}
+

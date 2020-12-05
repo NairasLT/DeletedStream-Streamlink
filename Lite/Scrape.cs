@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
-using Lite;
 class Scrape
 {
     public static async Task<LivestreamStatus> GetLivestreamStatusFromChannelId(string ChannelId)
@@ -15,7 +14,7 @@ class Scrape
         request.AddHeader("Cookie", "PREF=cvdm=grid; VISITOR_INFO1_LIVE=a4lxAJu-9BU");
         IRestResponse response = await client.ExecuteAsync(request);
 
-        string videoId = ScrapeBit.String(response.Content, "\\\"videoId\\\":\\\"", "\\\"", 40);
+        string videoId = ScrapeBit.String(response.Content, "\\\"videoId\\\":\\\"", "\\\"");
         if (videoId == null) return new LivestreamStatus(false, null);
         else return new LivestreamStatus(true, videoId);
     }
