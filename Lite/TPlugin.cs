@@ -19,47 +19,65 @@ class TrovoStreamer
     }
     public async Task BeginLoop()
     {
-        while (true)
+        try
         {
-            var client = new RestClient($"https://trovo.live/{Name}");
-            client.Timeout = -1;
-            var request = new RestRequest(Method.GET);
-            IRestResponse PageResponse = await client.ExecuteAsync(request);
-
-            if(PageResponse.Content == null)
+            while (true)
             {
-                await Sleep();
-                continue;
-            }
+                var client = new RestClient($"https://trovo.live/{Name}");
+                client.Timeout = -1;
+                var request = new RestRequest(Method.GET);
+                request.AddHeader("authority", "trovo.live");
+                request.AddHeader("cache-control", "max-age=0");
+                request.AddHeader("upgrade-insecure-requests", "1");
+                client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
+                request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+                request.AddHeader("service-worker-navigation-preload", "true");
+                request.AddHeader("sec-fetch-site", "same-origin");
+                request.AddHeader("sec-fetch-mode", "navigate");
+                request.AddHeader("sec-fetch-user", "?1");
+                request.AddHeader("sec-fetch-dest", "document");
+                request.AddHeader("accept-language", "en-US,en;q=0.9");
+                request.AddHeader("cookie", "_ga=GA1.1.620597506.1607281434; pgg_pvid=277130035220120621; afUserId=87b19c83-83b9-4c4d-bd18-64484bfcc93d-p; _ga_PTRRXCPFRR=GS1.1.1607281434.1.1.1607281434.0; _ga_18B1XRM1NB=GS1.1.1607281434.1.0.1607281435.0; pgg_pvid=299425075220120421");
+                request.AddHeader("if-none-match", "\"10b54-NAlZVFadyBGWcpm531Uakzt50s0\"");
+                request.AddHeader("if-modified-since", "Sun, 06 Dec 2020 19:03:54 GMT");
+                IRestResponse PageResponse = await client.ExecuteAsync(request);
 
-            string BoolText = ScrapeBit.String(PageResponse.Content, "\"isLive\":", ",\"");
-            if (BoolText == null)
-            {
-                await Sleep();
-                continue;
-            }
-
-            bool IsLive = bool.Parse(BoolText.ToLower());
-
-            if (IsLive)
-            {
-                Player DownloadInfo = Helpers.RetrievePlayer(PageResponse.Content);
-                if (DownloadInfo.Quality == Quality.NotFound)
+                if (PageResponse.Content == null)
+                {
+                    await Sleep();
                     continue;
+                }
 
-                string Title = ScrapeBit.String(PageResponse.Content, "\"StreamerPrivilegeInfo\",\"", "\",");
-                string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
+                string BoolText = ScrapeBit.String(PageResponse.Content, "\"isLive\":", ",\"");
+                if (BoolText == null)
+                {
+                    await Sleep();
+                    continue;
+                }
 
-                Console.WriteLine($"Found Livestream with Title: {Title} and Quality: {DownloadInfo.Quality}");
-                await Download(DownloadInfo.Url, Path);
+                bool IsLive = bool.Parse(BoolText.ToLower());
 
-                var Upload = new Upload(FilePaths.SecretsFile);
-                await Upload.Init();
-                _ = Upload.CreateWithRetry(Title, $"Trovo Livestream TIME{DateTime.UtcNow}", Path, TimeSpan.FromHours(3));
+                if (IsLive)
+                {
+                    Player DownloadInfo = Helpers.RetrievePlayer(PageResponse.Content);
+                    if (DownloadInfo.Quality == Quality.NotFound)
+                        continue;
 
+                    string Title = ScrapeBit.String(PageResponse.Content, "\"StreamerPrivilegeInfo\",\"", "\",");
+                    string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
+
+                    Console.WriteLine($"Found Livestream with Title: {Title} and Quality: {DownloadInfo.Quality}");
+                    await Download(DownloadInfo.Url, Path);
+
+                    var Upload = new Upload(FilePaths.SecretsFile);
+                    await Upload.Init();
+                    _ = Upload.CreateWithRetry(Title, $"Trovo Livestream\nUpload Time:\n{DateTime.UtcNow}", Path, TimeSpan.FromHours(3));
+
+                }
+                await Sleep();
             }
-            await Sleep();
         }
+        catch (Exception x) { Console.WriteLine($"Error in Check loop, Exception occurred: {x.Message}, please restart"); }
 
     }
     private async Task Download(string Url, string Path)
