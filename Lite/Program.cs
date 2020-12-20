@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using YoutubeExplode;
-using YoutubeExplode.Videos;
+using Newtonsoft.Json;
 
 class Program
 {
@@ -24,13 +17,12 @@ class Program
         {
             if (user.ChannelId == FilePaths.ConfigExampleText) // TODO: Add Class for the console text.
             {
-                ConsoleHelpers.ShowConfigureChannels();
+                ConsoleHelpers.WriteInColor("Please configure the config file correctly. And remove the example Object", ConsoleColor.Red);
+                ConsoleHelpers.WriteInColor("Press Enter to Exit.", ConsoleColor.Yellow);
                 return;
             }
 
-            ConsoleHelpers.ShowStartedChannel(user);
-
-
+            ConsoleHelpers.WriteInColor($"Started checking [{user.ChannelId}] delay {user.MinutesTimeOut} min Platform {user.Platform}", ConsoleColor.Yellow);
             switch (user.Platform)
             {
                 case Platform.YouTube:
@@ -52,22 +44,11 @@ class Program
 
 public static class ConsoleHelpers
 {
-    public static void ShowConfigureChannels()
+    public static void WriteInColor(string Text,  ConsoleColor color)
     {
-        Console.BackgroundColor = ConsoleColor.Red;
-        Console.WriteLine("Please configure the Streamer Channels, and remove the Example Object.");
-        Console.ResetColor();
-        Console.WriteLine("Press Enter key to Exit.");
-        Console.ReadLine();
-    }
-
-    public static void ShowStartedChannel(Channel user)
-    {
-        Console.BackgroundColor = ConsoleColor.Yellow;
-        Console.ForegroundColor = ConsoleColor.Black;
-        Console.WriteLine($"Started [{user.ChannelId}] with {user.MinutesTimeOut} minute Timeout.");
+        Console.BackgroundColor = color;
+        Console.WriteLine(Text);
         Console.ResetColor();
     }
-
 }
 

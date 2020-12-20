@@ -38,6 +38,9 @@ class ConfigFile
     {
     }
 
+    public bool AutoDelete = false;
+    public int AutoDeleteAfterDays = 2;
+    public List<FileEntry> DeleteList = new List<FileEntry>();
     public List<Channel> Channels = new List<Channel>();
 }
 public class FileName
