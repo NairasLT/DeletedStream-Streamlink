@@ -115,16 +115,6 @@ class Upload
                 await videosInsertRequest.UploadAsync();
                 Console.WriteLine($"Uploaded Video {video.Id}");
 
-
-                var cfg = new Config<ConfigFile>(FilePaths.ConfigFile);
-                var config = cfg.Read();
-                if(config.AutoDelete)
-                {
-                    config.DeleteList.Add(new FileEntry(Path, DateTime.Now.AddDays(config.AutoDeleteAfterDays)));
-                    cfg.Write(config);
-                }
-
-
                 fileStream.Dispose();
             }
         }

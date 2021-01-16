@@ -39,7 +39,7 @@ class Config<T>
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public bool Create(T type)
+    public bool Create(T type) 
     {
         if (File.Exists(Path)) return true;
 

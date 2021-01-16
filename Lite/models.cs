@@ -30,19 +30,86 @@ public enum Platform
 
 class ConfigFile
 {
-    public ConfigFile(List<Channel> channels)
+    public ChannelGroup[] ChannelGroups;
+
+    public ConfigFile(ChannelGroup[] channelGroups)
+    {
+        ChannelGroups = channelGroups;
+    }
+}
+
+public class ChannelGroup
+{
+    public IList<Channel> Channels = new List<Channel>();
+    public bool Async = false;
+    public int AsyncMinuteDelay = 6;
+
+    public ChannelGroup(IList<Channel> channels, bool async, int asyncMinuteDelay)
     {
         Channels = channels;
-    }
-    public ConfigFile()
-    {
+        Async = async;
+        AsyncMinuteDelay = asyncMinuteDelay;
     }
 
-    public bool AutoDelete = false;
-    public int AutoDeleteAfterDays = 2;
-    public List<FileEntry> DeleteList = new List<FileEntry>();
-    public List<Channel> Channels = new List<Channel>();
+
+    public static void AsynchronousInfiniteStart(ChannelGroup group)
+    {
+        foreach (var user in group.Channels)
+        {
+            if (user.ChannelId == FilePaths.ConfigExampleText) { CError.ErrorExampleObjectFound(); return; }
+
+            CMessage.InctanceStarted(user, true);
+
+
+            switch (user.Platform)
+            {
+                case Platform.Trovo:
+                    var trovo = new TrovoStreamer(user.ChannelId, TimeSpan.FromMinutes(user.MinutesTimeOut));
+                    _ = trovo.RunInfinite();
+                    break;
+
+                case Platform.YouTube:
+                    var Runtime = new ActiveChannel(user.ChannelId, TimeSpan.FromMinutes(user.MinutesTimeOut));
+                    _ = Runtime.RunInfinite();
+                    break;
+            }
+        }
+    }
+
+
+    public async static Task SynchronousInfinite(ChannelGroup group)
+    {
+        while (true)
+        {
+            foreach (var user in group.Channels)
+            {
+                if (user.ChannelId == FilePaths.ConfigExampleText) { CError.ErrorExampleObjectFound(); return;}
+
+                CMessage.InctanceStarted(user, false);
+
+                switch (user.Platform)
+                {
+
+                    case Platform.Trovo:
+                        var trovo = new TrovoStreamer(user.ChannelId, TimeSpan.FromMinutes(user.MinutesTimeOut));
+                        await trovo.RunOnce();
+                        break;
+
+                    case Platform.YouTube:
+                        var Runtime = new ActiveChannel(user.ChannelId, TimeSpan.FromMinutes(user.MinutesTimeOut));
+                        await Runtime.RunOnce();
+                        break;
+                }
+            }
+
+            await Task.Delay(TimeSpan.FromMinutes(group.AsyncMinuteDelay));
+        }
+    }
+
 }
+
+
+
 public class FileName
 {
     public static string Purify(string Input)
@@ -116,10 +183,18 @@ public class FilePaths
     {
         if (!File.Exists(ConfigFile))
         {
-            List<Channel> temp = new List<Channel>();
-            temp.Add(new Channel(ConfigExampleText, 6, Platform.YouTube));
-            ConfigFile tempfile = new ConfigFile(temp);
-            File.WriteAllText(ConfigFile, JsonConvert.SerializeObject(tempfile, Formatting.Indented));
+            IList<ChannelGroup> Groups = new List<ChannelGroup>();
+
+            IList<Channel> ChannelsForTemp = new List<Channel>();
+            ChannelsForTemp.Add(new Channel(ConfigExampleText, 6, Platform.YouTube));
+
+
+            ChannelGroup TempGroup = new ChannelGroup(ChannelsForTemp, false, 6);
+            Groups.Add(TempGroup);
+
+            ConfigFile configFile = new ConfigFile(Groups.ToArray());
+
+            File.WriteAllText(ConfigFile, JsonConvert.SerializeObject(configFile, Formatting.Indented));
         }
     }
     private static void CheckFile(string Path, string Content)
@@ -167,12 +242,19 @@ public class ActiveChannel
     public string ChannelId { get; set; }
     public TimeSpan TimeOut { get; set; }
 
+
+    public async Task<bool> RequestCurrentStatus()
+    {
+        var Status = await Scrape.GetLivestreamStatusFromChannelId(ChannelId);
+        return Status.IsLivestreaming;
+    }
+
     internal async Task Sleep()
     {
         await Task.Delay(TimeOut);
     }
 
-    public async Task Run()
+    public async Task RunInfinite()
     {
         while (true)
         {
@@ -201,37 +283,27 @@ public class ActiveChannel
             await Sleep();
         }
     }
-}
-public static class ScrapeBit
-{
-    public static string String(string SourceText, string ToFindText, string ReadUntilString)
+
+
+    public async Task RunOnce()
     {
-        int dIndex = SourceText.IndexOf(ToFindText); // Get Index in string of the find Text.
+        var Status = await Scrape.GetLivestreamStatusFromChannelId(ChannelId);
 
-        if (dIndex == -1) return null; // If Find Text is not found return.
+        if (!Status.IsLivestreaming)
+            return;
 
-        SourceText = SourceText.Substring(dIndex + ToFindText.Length);
+        var ytExplode = new YoutubeClient();
+        var metadata = await ytExplode.Videos.GetAsync(Status.videoId);
+        var StreamObject = new LivestreamObject(metadata, FilePaths.GetThumbnailPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].jpeg")), FilePaths.GetLivestreamsPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4")));
+       
+        try
+        { new WebClient().DownloadFile(metadata.Thumbnails.MaxResUrl, StreamObject.ThumbnailPath); } catch (Exception) { }
 
-        int FoundTerminators = 0;
-        IList<char> ReadTextChars = new List<char>(); //Where to store the good chars.
-        char[] SourceTextChar = SourceText.ToArray(); // To Char Array
+        await Streamlink.Download(StreamObject.LivestreamPath, metadata.Url);
 
-        char[] TerminatorChars = ReadUntilString.ToArray(); //To Char Array
+        var Upload = new Upload(FilePaths.SecretsFile);
+        await Upload.Init();
+        _ = Upload.CreateWithRetry(StreamObject, TimeSpan.FromHours(3));
 
-        for (int i = 0; i < SourceTextChar.Length; i++)
-        {
-            if (FoundTerminators == TerminatorChars.Length) break;
-
-            if (SourceText[i] == TerminatorChars[FoundTerminators])
-            {
-                FoundTerminators++;
-                continue;
-            }
-
-            FoundTerminators = 0;
-            ReadTextChars.Add(SourceText[i]); // Add the good char
-        }
-        if (ReadTextChars.Count <= 0) return null;
-        else return new string(ReadTextChars.ToArray());
     }
 }

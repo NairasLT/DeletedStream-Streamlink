@@ -14,7 +14,7 @@ class Scrape
         request.AddHeader("Cookie", "PREF=cvdm=grid; VISITOR_INFO1_LIVE=a4lxAJu-9BU");
         IRestResponse response = await client.ExecuteAsync(request);
 
-        string videoId = ScrapeBit.String(response.Content, "\\\"videoId\\\":\\\"", "\\\"");
+        string videoId = ScrapeBit.FirstString(response.Content, "\\\"videoId\\\":\\\"", "\\\"");
         if (videoId == null) return new LivestreamStatus(false, null);
         else return new LivestreamStatus(true, videoId);
     }

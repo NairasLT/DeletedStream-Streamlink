@@ -106,8 +106,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="DeleteSystem.cs" />
     <Compile Include="models.cs" />
+    <Compile Include="ScrapeBit.cs" />
     <Compile Include="TPlugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
