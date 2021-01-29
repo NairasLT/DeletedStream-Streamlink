@@ -95,7 +95,7 @@ class TrovoStreamer
                     if (DownloadInfo.Quality == Quality.NotFound)
                         continue;
 
-                    string Title = ScrapeBit.FirstString(PageResponse.Content, "\"StreamerPrivilegeInfo\",\"", "\",");
+                    string Title = ScrapeBit.FirstString(PageResponse.Content, "\"CommStreamerPrivilegeInfo\",\"", "\",");
                     string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
 
                     Console.WriteLine($"Found Livestream with Title: {Title} and Quality: {DownloadInfo.Quality}");
