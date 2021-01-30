@@ -13,11 +13,16 @@ class TrovoStreamer
     public string Name { get; set; }
     public TimeSpan Delay { get; set; }
 
+    internal static string ISLIVE_SEARCH_STRING = "\"isLive\":";
+    internal static string ISLIVE_SEARCHUNTIL_STRING = ",";
+
+    internal static string TITLE_SEARCH_STRING = "\"CommStreamerPrivilegeInfo\",\"";
+    internal static string TITLE_SEARCHUNTIL_STRING = "\"";
+
     private async Task Sleep()
     {
         await Task.Delay(Delay);
     }
-
     void AddRestHeaders(ref RestRequest request)
     {
         request.AddHeader("authority", "trovo.live");
@@ -32,8 +37,6 @@ class TrovoStreamer
         request.AddHeader("accept-language", "en-US,en;q=0.9");
         request.AddHeader("if-modified-since", "Sun, 06 Dec 2020 19:03:54 GMT");
     }
-
-
     /// <summary>
     /// If the streamer is live returns the page content.
     /// </summary>
@@ -50,7 +53,7 @@ class TrovoStreamer
         if (PageResponse.Content == null)
             return null;
 
-        string BoolText = ScrapeBit.FirstString(PageResponse.Content, "\"isLive\":", ",\"");
+        string BoolText = ScrapeBit.FirstString(PageResponse.Content, ISLIVE_SEARCH_STRING, ISLIVE_SEARCHUNTIL_STRING);
         if (BoolText == null)
             return null;
 
@@ -80,7 +83,7 @@ class TrovoStreamer
                     continue;
                 }
 
-                string BoolText = ScrapeBit.FirstString(PageResponse.Content, "\"isLive\":", ",\"");
+                string BoolText = ScrapeBit.FirstString(PageResponse.Content, ISLIVE_SEARCH_STRING, ISLIVE_SEARCHUNTIL_STRING);
                 if (BoolText == null)
                 {
                     await Sleep();
@@ -95,7 +98,7 @@ class TrovoStreamer
                     if (DownloadInfo.Quality == Quality.NotFound)
                         continue;
 
-                    string Title = ScrapeBit.FirstString(PageResponse.Content, "\"CommStreamerPrivilegeInfo\",\"", "\",");
+                    string Title = ScrapeBit.FirstString(PageResponse.Content, TITLE_SEARCH_STRING, TITLE_SEARCHUNTIL_STRING);
                     string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
 
                     Console.WriteLine($"Found Livestream with Title: {Title} and Quality: {DownloadInfo.Quality}");
@@ -125,7 +128,7 @@ class TrovoStreamer
                 if (DownloadInfo.Quality == Quality.NotFound)
                     return;
 
-                string Title = ScrapeBit.FirstString(PageResponse, "\"StreamerPrivilegeInfo\",\"", "\",");
+                string Title = ScrapeBit.FirstString(PageResponse, TITLE_SEARCH_STRING, TITLE_SEARCHUNTIL_STRING);
                 string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
 
                 Console.WriteLine($"Found Livestream with Title: {Title} and Quality: {DownloadInfo.Quality}");
@@ -140,8 +143,6 @@ class TrovoStreamer
         catch (Exception x) { Console.WriteLine($"Error in Check loop, Exception occurred: {x.Message}, please restart"); }
 
     }
-
-
 
     private async Task Download(string Url, string Path)
     {
