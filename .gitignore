@@ -2,4 +2,5 @@ Config
 Livestreams
 Secrets
 Thumbnails
-bin
+bin/Debug
+bin/Release
