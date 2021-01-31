@@ -4,9 +4,9 @@ using System.Net;
 using System.Threading.Tasks;
 using YoutubeExplode;
 
-public class ActiveChannel
+public class YouTubePlugin : IPlugin
 {
-    public ActiveChannel(string channelId, TimeSpan timeOut)
+    public YouTubePlugin(string channelId, TimeSpan timeOut)
     {
         ChannelId = channelId;
         TimeOut = timeOut;
@@ -14,7 +14,6 @@ public class ActiveChannel
 
     public string ChannelId { get; set; }
     public TimeSpan TimeOut { get; set; }
-
 
     public async Task<bool> RequestCurrentStatus()
     {
@@ -31,53 +30,41 @@ public class ActiveChannel
     {
         while (true)
         {
-            var Status = await GetLivestreamStatusFromChannelId(ChannelId);
-
-            if (!Status.IsLivestreaming)
-            {
-                await Sleep();
-                continue;
-            }
-
-            var ytExplode = new YoutubeClient();
-            var metadata = await ytExplode.Videos.GetAsync(Status.videoId);
-            var StreamObject = new LivestreamObject(metadata, FilePaths.GetThumbnailPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].jpeg")), FilePaths.GetLivestreamsPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4")));
-            try
-            {
-                new WebClient().DownloadFile(metadata.Thumbnails.MaxResUrl, StreamObject.ThumbnailPath);
-            }
-            catch (Exception) { }
-            await Streamlink.Download(StreamObject.LivestreamPath, metadata.Url);
-
-            var Upload = new Upload(FilePaths.SecretsFile);
-            await Upload.Init();
-            _ = Upload.CreateWithRetry(StreamObject, TimeSpan.FromHours(3));
-
+            await Run();
             await Sleep();
         }
+        
     }
 
-
-    public async Task RunOnce()
+    public async Task Run()
     {
         var Status = await GetLivestreamStatusFromChannelId(ChannelId);
 
         if (!Status.IsLivestreaming)
             return;
+        
 
         var ytExplode = new YoutubeClient();
         var metadata = await ytExplode.Videos.GetAsync(Status.videoId);
-        var StreamObject = new LivestreamObject(metadata, FilePaths.GetThumbnailPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].jpeg")), FilePaths.GetLivestreamsPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4")));
+
+        var UploadInformation = new YoutubeUpload()
+        {
+            Title = metadata.Title,
+            Description = metadata.Description,
+            ThumbnailPath = FilePaths.GetThumbnailPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].jpeg")),
+            LivestreamPath = FilePaths.GetLivestreamsPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"))
+         };
+
 
         try
-        { new WebClient().DownloadFile(metadata.Thumbnails.MaxResUrl, StreamObject.ThumbnailPath); }
+        { new WebClient().DownloadFile(metadata.Thumbnails.MaxResUrl, UploadInformation.ThumbnailPath); }
         catch (Exception) { }
 
-        await Streamlink.Download(StreamObject.LivestreamPath, metadata.Url);
+        await Streamlink.Download(UploadInformation.LivestreamPath, metadata.Url);
 
-        var Upload = new Upload(FilePaths.SecretsFile);
+        var Upload = new Youtube(FilePaths.SecretsFile);
         await Upload.Init();
-        _ = Upload.CreateWithRetry(StreamObject, TimeSpan.FromHours(3));
+        _ = Upload.UploadWithRetry(UploadInformation, TimeSpan.FromHours(3));
 
     }
 

@@ -91,4 +91,24 @@ public static class ScrapeBit
             indexes.Add(index);
         }
     }
+
+    public static string FirstFrom(string Source, Scrape scrape)
+    {
+        return ScrapeBit.FirstString(Source, scrape.SearchString, scrape.SearchUntilString);
+    }
+    public static string[] AllFrom(string Source, Scrape scrape)
+    {
+        return ScrapeBit.AllString(Source, scrape.SearchString, scrape.SearchUntilString);
+    }
+}
+
+public class Scrape
+{
+    public Scrape(string searchString, string searchUntilString)
+    {
+        SearchString = searchString;
+        SearchUntilString = searchUntilString;
+    }
+    public string SearchString { get; set; }
+    public string SearchUntilString { get; set; }
 }

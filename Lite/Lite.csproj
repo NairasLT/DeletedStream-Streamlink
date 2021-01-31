@@ -105,7 +105,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Debug\Debug.cs" />
     <Compile Include="Helper\Config.cs" />
+    <Compile Include="Helper\ScrapeBitRelated.cs" />
+    <Compile Include="Plugins\Plugin.cs" />
+    <Compile Include="Plugins\TrovoPluginGQL.cs" />
+    <Compile Include="Source\ChannelGroup.cs" />
+    <Compile Include="Source\FilePaths.cs" />
     <Compile Include="Source\models.cs" />
     <Compile Include="Plugins\YouTubePlugin.cs" />
     <Compile Include="Helper\ScrapeBit.cs" />

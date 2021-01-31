@@ -10,17 +10,16 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-class Upload
+class Youtube
 {
     YouTubeService service;
     string Secrets = string.Empty;
     string User = string.Empty;
-
     /// <summary>
     /// MUST CALL CALL 'INIT' FUNCTION BEFORE USING!!
     /// </summary>
     /// <param name="ClientSecretsPath"></param>
-    public Upload(string ClientSecretsPath, string SpecifiedUser = "user")
+    public Youtube(string ClientSecretsPath, string SpecifiedUser = "user")
     {
         Secrets = ClientSecretsPath;
         User = SpecifiedUser;
@@ -29,50 +28,19 @@ class Upload
     {
         service = await GetService(Secrets, User);
     }
-
-    public async Task<bool> Create(LivestreamObject livestream)
+    public async Task UploadWithRetry(YoutubeUpload info, TimeSpan RetryTimeout)
     {
         try
         {
             var video = new Video();
             video.Snippet = new VideoSnippet();
-            video.Snippet.Title = livestream.Info.Title;
-            video.Snippet.Description = livestream.Info.Description;
-            video.Snippet.Tags = new string[] { "" };
-            video.Snippet.CategoryId = "22";
-            video.Status = new VideoStatus();
-            video.Status.PrivacyStatus = "unlisted";
-            var filePath = livestream.LivestreamPath;
-
-            using (var fileStream = new FileStream(filePath, FileMode.Open))
-            {
-                var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
-                videosInsertRequest.ResponseReceived += async (Video) =>
-                {
-                    await SetThumbnail(Video.Id, livestream.ThumbnailPath);
-                };
-                await videosInsertRequest.UploadAsync();
-                fileStream.Dispose();
-            }
-
-            return true;
-        }
-        catch (Exception) {  return false; }
-    }
-
-    public async Task CreateWithRetry(LivestreamObject livestream, TimeSpan RetryTimeout)
-    {
-        try
-        {
-            var video = new Video();
-            video.Snippet = new VideoSnippet();
-            video.Snippet.Title = livestream.Info.Title;
-            video.Snippet.Description = livestream.Info.Description;
+            video.Snippet.Title = info.Title;
+            video.Snippet.Description = info.Description;
             video.Snippet.Tags = new string[] { "" };
             video.Snippet.CategoryId = "22";
             video.Status = new VideoStatus();
             video.Status.PrivacyStatus = "private";
-            var filePath = livestream.LivestreamPath;
+            var filePath = info.LivestreamPath;
 
             using (var fileStream = new FileStream(filePath, FileMode.Open))
             {
@@ -80,73 +48,27 @@ class Upload
 
                 videosInsertRequest.ResponseReceived += async (Video) =>
                 {
-                    if (File.Exists(livestream.ThumbnailPath))
-                        await SetThumbnail(Video.Id, livestream.ThumbnailPath);
+                    if (info.ThumbnailPath != null && File.Exists(info.ThumbnailPath))
+                        await SetThumbnail(Video.Id, info.ThumbnailPath);
                 };
                 await videosInsertRequest.UploadAsync();
-                Console.WriteLine($"Uploaded Video {video.Id}");
+                Console.WriteLine($"UPLOADED VIDEO WITH ID {video.Id} TITLE: {info.Title} PATH: {info.LivestreamPath}");
                 fileStream.Dispose();
             }
         }
+        catch(FileNotFoundException)
+        {
+            CError.TryUploadFileNonExistFile();
+        }
         catch (Exception x)
         {
-            Console.WriteLine($"Error Uploaded most likely exeeded quota limit {x.Message}   Retrying...");
+            CError.YouTubeAPIDailyQuotaLimitReached(x);
             await Task.Delay(RetryTimeout);
-            _ = CreateWithRetry(livestream, RetryTimeout);
-        }
-    }
-    public async Task CreateWithRetry(string Title, string Description, string Path, TimeSpan timeout)
-    {
-        try
-        {
-            var video = new Video();
-            video.Snippet = new VideoSnippet();
-            video.Snippet.Title = Title;
-            video.Snippet.Description = Description;
-            video.Snippet.Tags = new string[] { "" };
-            video.Snippet.CategoryId = "22";
-            video.Status = new VideoStatus();
-            video.Status.PrivacyStatus = "private";
-            var filePath = Path;
-
-            using (var fileStream = new FileStream(filePath, FileMode.Open))
-            {
-                var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
-                await videosInsertRequest.UploadAsync();
-                Console.WriteLine($"Uploaded Video {video.Id}");
-
-                fileStream.Dispose();
-            }
-        }
-        catch (Exception x)
-        {
-            Console.WriteLine($"Error Uploaded most likely exeeded quota limit {x.Message}   Retrying...");
-            await Task.Delay(timeout);
-            _ = CreateWithRetry(Title, Description, Path, timeout);
-        }
-    }
-
-
-    public async Task Start(string title, string description, string path)
-    {
-        var video = new Video();
-        video.Snippet = new VideoSnippet();
-        video.Snippet.Title = title;
-        video.Snippet.Description = description;
-        video.Snippet.Tags = new string[] { "" };
-        video.Snippet.CategoryId = "22";
-        video.Status = new VideoStatus();
-        video.Status.PrivacyStatus = "private";
-        var filePath = path;
-        using (var fileStream = new FileStream(filePath, FileMode.Open))
-        {
-            var videosInsertRequest = service.Videos.Insert(video, "snippet,status", fileStream, "video/*");
-            await videosInsertRequest.UploadAsync();
-            fileStream.Dispose();
+            _ = UploadWithRetry(info, RetryTimeout);
         }
     }
     /// <summary>
-    /// Only Jpeg, files are supported, changing file extension to png or else dosent work you need to save as png!
+    /// Only Jpeg files are supported.
     /// </summary>
     /// <param name="videoid"></param>
     /// <param name="ThumbnailPath"></param>
@@ -178,3 +100,25 @@ class Upload
         return youtubeService;
     }
 }
+
+
+/// <summary>
+/// Used for Youtube class, provides upload information, paths, titles....
+/// </summary>
+public class YoutubeUpload
+{
+    public YoutubeUpload(string title, string description, string thumbnailPath, string livestreamPath)
+    {
+        Title = title;
+        Description = description;
+        ThumbnailPath = thumbnailPath;
+        LivestreamPath = livestreamPath;
+    }
+    public YoutubeUpload() { }
+
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public string ThumbnailPath { get; set; }
+    public string LivestreamPath { get; set; }
+}
+

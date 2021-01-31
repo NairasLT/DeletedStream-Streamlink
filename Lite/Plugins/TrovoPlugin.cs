@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using RestSharp;
-class TrovoStreamer
+class TrovoPlugin : IPlugin
 {
-    public TrovoStreamer(string name, TimeSpan delay)
+    public TrovoPlugin(string name, TimeSpan delay)
     {
         Name = name;
         Delay = delay;
@@ -13,47 +13,25 @@ class TrovoStreamer
     public string Name { get; set; }
     public TimeSpan Delay { get; set; }
 
-    internal static string ISLIVE_SEARCH_STRING = "\"isLive\":";
-    internal static string ISLIVE_SEARCHUNTIL_STRING = ",";
-
-    internal static string TITLE_SEARCH_STRING = "\"CommStreamerPrivilegeInfo\",\"";
-    internal static string TITLE_SEARCHUNTIL_STRING = "\"";
-
+    internal Scrape ISLIVE = new Scrape("\"isLive\":", ",");
+    internal Scrape TITLE = new Scrape("property=\"og:description\" content=\"", "\"");
+    internal Scrape DESCRIPTION = new Scrape("info:\"", "\"");
     private async Task Sleep()
     {
         await Task.Delay(Delay);
     }
-    void AddRestHeaders(ref RestRequest request)
-    {
-        request.AddHeader("authority", "trovo.live");
-        request.AddHeader("cache-control", "max-age=0");
-        request.AddHeader("upgrade-insecure-requests", "1");
-        request.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-        request.AddHeader("service-worker-navigation-preload", "true");
-        request.AddHeader("sec-fetch-site", "same-origin");
-        request.AddHeader("sec-fetch-mode", "navigate");
-        request.AddHeader("sec-fetch-user", "?1");
-        request.AddHeader("sec-fetch-dest", "document");
-        request.AddHeader("accept-language", "en-US,en;q=0.9");
-        request.AddHeader("if-modified-since", "Sun, 06 Dec 2020 19:03:54 GMT");
-    }
-    /// <summary>
-    /// If the streamer is live returns the page content.
-    /// </summary>
-    /// <returns></returns>
     public async Task<string> RequestCurrentStatus()
     {
         var client = new RestClient($"https://trovo.live/{Name}");
         client.Timeout = -1;
         client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
         var request = new RestRequest(Method.GET);
-        AddRestHeaders(ref request);
         IRestResponse PageResponse = await client.ExecuteAsync(request);
 
         if (PageResponse.Content == null)
             return null;
 
-        string BoolText = ScrapeBit.FirstString(PageResponse.Content, ISLIVE_SEARCH_STRING, ISLIVE_SEARCHUNTIL_STRING);
+        string BoolText = ScrapeBit.FirstFrom(PageResponse.Content, ISLIVE);
         if (BoolText == null)
             return null;
 
@@ -62,62 +40,15 @@ class TrovoStreamer
         if (status) return PageResponse.Content;
         else return null;
     }
-
     public async Task RunInfinite()
     {
-        try
+        while (true)
         {
-            while (true)
-            {
-                var client = new RestClient($"https://trovo.live/{Name}");
-                client.Timeout = -1;
-                var request = new RestRequest(Method.GET);
-                AddRestHeaders(ref request);
-                client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
-
-                IRestResponse PageResponse = await client.ExecuteAsync(request);
-
-                if (PageResponse.Content == null)
-                {
-                    await Sleep();
-                    continue;
-                }
-
-                string BoolText = ScrapeBit.FirstString(PageResponse.Content, ISLIVE_SEARCH_STRING, ISLIVE_SEARCHUNTIL_STRING);
-                if (BoolText == null)
-                {
-                    await Sleep();
-                    continue;
-                }
-
-                bool IsLive = bool.Parse(BoolText.ToLower());
-
-                if (IsLive)
-                {
-                    Player DownloadInfo = Player.RetrievePlayer(PageResponse.Content);
-                    if (DownloadInfo.Quality == Quality.NotFound)
-                        continue;
-
-                    string Title = ScrapeBit.FirstString(PageResponse.Content, TITLE_SEARCH_STRING, TITLE_SEARCHUNTIL_STRING);
-                    string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
-
-                    Console.WriteLine($"Found Livestream with Title: {Title} and Quality: {DownloadInfo.Quality}");
-                    await Download(DownloadInfo.Url, Path);
-
-                    var Upload = new Upload(FilePaths.SecretsFile);
-                    await Upload.Init();
-                    _ = Upload.CreateWithRetry(Title, $"Trovo Livestream\nUpload Time:\n{DateTime.UtcNow}", Path, TimeSpan.FromHours(3));
-
-                }
-                await Sleep();
-            }
+            await Run();
+            await Sleep();
         }
-        catch (Exception x) { Console.WriteLine($"Error in Check loop, Exception occurred: {x.Message}, please restart"); }
-
     }
-
-
-    public async Task RunOnce()
+    public async Task Run()
     {
         try
         {
@@ -128,22 +59,25 @@ class TrovoStreamer
                 if (DownloadInfo.Quality == Quality.NotFound)
                     return;
 
-                string Title = ScrapeBit.FirstString(PageResponse, TITLE_SEARCH_STRING, TITLE_SEARCHUNTIL_STRING);
+                string Title = ScrapeBit.FirstFrom(PageResponse, TITLE);
                 string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
+                string Description = ScrapeBit.FirstFrom(PageResponse, DESCRIPTION);
+
 
                 Console.WriteLine($"Found Livestream with Title: {Title} and Quality: {DownloadInfo.Quality}");
                 await Download(DownloadInfo.Url, Path);
 
-                var Upload = new Upload(FilePaths.SecretsFile);
+                var Upload = new Youtube(FilePaths.SecretsFile);
                 await Upload.Init();
-                _ = Upload.CreateWithRetry(Title, $"Trovo Livestream\nUpload Time:\n{DateTime.UtcNow}", Path, TimeSpan.FromHours(3));
+                _ = Upload.UploadWithRetry(new YoutubeUpload() { LivestreamPath = Path, Title = Title, Description = Description, ThumbnailPath = null }, TimeSpan.FromHours(3));
 
             }
         }
+
+
+
         catch (Exception x) { Console.WriteLine($"Error in Check loop, Exception occurred: {x.Message}, please restart"); }
-
     }
-
     private async Task Download(string Url, string Path)
     {
         var Web = new WebClient();
