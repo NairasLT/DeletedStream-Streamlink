@@ -25,7 +25,7 @@ class Update
     {
         try
         {
-            var client = new RestClient("https://raw.githubusercontent.com/Nojus0/YouTube-Livestream-Archiver/master/Lite/Latest.json");
+            var client = new RestClient("https://raw.githubusercontent.com/Nojus0/YouTube-Livestream-Archiver/master/Lite/Latest.txt");
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
