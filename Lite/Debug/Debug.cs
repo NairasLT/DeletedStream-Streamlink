@@ -25,9 +25,9 @@ public static class CError
     {
         ConsoleColor.DarkGreen.WriteLine($"Error uploading video to YouTube, most likely you have exceeded your YouTube API Daily Limit, 3-4 Videos per day, Trying to upload again after 3 hours. Exception Details: {x.Message}");
     }
-    public static void ErrorCheckingUpdates()
+    public static void ErrorCheckingUpdates(Exception x)
     {
-        ConsoleColor.DarkGreen.WriteLine($"Error occured while checking for updates. Please check https://github.com/Nojus0/YouTube-Livestream-Archiver");
+        ConsoleColor.DarkGreen.WriteLine($"Error occured while checking for updates. Please check https://github.com/Nojus0/YouTube-Livestream-Archiver, more details {x.Message}");
     }
     public static void ErrorVersionFile(Exception x)
     {
