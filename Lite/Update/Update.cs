@@ -29,9 +29,9 @@ class Update
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
-            UpdateInformation WebVersion = JsonConvert.DeserializeObject<UpdateInformation>(response.Content);
 
-            if(CurrentInformation.LatestVersion < WebVersion.LatestVersion)
+            UpdateInformation WebVersion = JsonConvert.DeserializeObject<UpdateInformation>(response.Content);
+            if (CurrentInformation.LatestVersion < WebVersion.LatestVersion)
             { // Implement more
                 switch (WebVersion.Severity)
                 {
