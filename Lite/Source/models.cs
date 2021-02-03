@@ -16,8 +16,9 @@ public class Channel
 
 public enum Platform
 {
-    YouTube,
-    Trovo
+    YouTube = 0,
+    Trovo = 1,
+    TrovoDeprecated = -1
 }
 
 class ConfigFile

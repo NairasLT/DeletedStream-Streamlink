@@ -120,10 +120,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\Streamlink.cs" />
     <Compile Include="Source\Upload.cs" />
+    <Compile Include="Update\Update.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Latest.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

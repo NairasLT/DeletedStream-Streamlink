@@ -18,6 +18,7 @@ public class Startup
     {
         FilePaths.Setup();
         Console.WriteLine(FilePaths.ConfigFile);
+        _ = new Update().Get();
         var cfg = new Config<ConfigFile>(FilePaths.ConfigFile);
         var Filecontent = cfg.Read();
 

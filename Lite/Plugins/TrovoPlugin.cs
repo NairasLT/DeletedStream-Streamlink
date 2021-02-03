@@ -5,21 +5,17 @@ using System.Threading.Tasks;
 using RestSharp;
 class TrovoPlugin : IPlugin
 {
-    public TrovoPlugin(string name, TimeSpan delay)
+    public TrovoPlugin(string name, TimeSpan delay) // DEPRACTED
     {
         Name = name;
-        Delay = delay;
+        Timeout = delay;
     }
     public string Name { get; set; }
-    public TimeSpan Delay { get; set; }
+    public TimeSpan Timeout { get; set; }
 
     internal Scrape ISLIVE = new Scrape("\"isLive\":", ",");
     internal Scrape TITLE = new Scrape("property=\"og:description\" content=\"", "\"");
     internal Scrape DESCRIPTION = new Scrape("info:\"", "\"");
-    private async Task Sleep()
-    {
-        await Task.Delay(Delay);
-    }
     public async Task<string> RequestCurrentStatus()
     {
         var client = new RestClient($"https://trovo.live/{Name}");
@@ -45,7 +41,7 @@ class TrovoPlugin : IPlugin
         while (true)
         {
             await Run();
-            await Sleep();
+            await Task.Delay(Timeout);
         }
     }
     public async Task Run()
@@ -73,8 +69,6 @@ class TrovoPlugin : IPlugin
 
             }
         }
-
-
 
         catch (Exception x) { Console.WriteLine($"Error in Check loop, Exception occurred: {x.Message}, please restart"); }
     }

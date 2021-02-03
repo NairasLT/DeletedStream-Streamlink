@@ -9,11 +9,11 @@ public class YouTubePlugin : IPlugin
     public YouTubePlugin(string channelId, TimeSpan timeOut)
     {
         ChannelId = channelId;
-        TimeOut = timeOut;
+        Timeout = timeOut;
     }
 
     public string ChannelId { get; set; }
-    public TimeSpan TimeOut { get; set; }
+    public TimeSpan Timeout { get; set; }
 
     public async Task<bool> RequestCurrentStatus()
     {
@@ -21,17 +21,12 @@ public class YouTubePlugin : IPlugin
         return Status.IsLivestreaming;
     }
 
-    internal async Task Sleep()
-    {
-        await Task.Delay(TimeOut);
-    }
-
     public async Task RunInfinite()
     {
         while (true)
         {
             await Run();
-            await Sleep();
+            await Task.Delay(Timeout);
         }
         
     }
@@ -68,7 +63,7 @@ public class YouTubePlugin : IPlugin
 
     }
 
-    public static async Task<LivestreamStatus> GetLivestreamStatusFromChannelId(string ChannelId)
+    public static async Task<BasicStreamInfo> GetLivestreamStatusFromChannelId(string ChannelId)
     {
         var client = new RestClient($"https://www.youtube.com/embed/live_stream?channel={ChannelId}");
         client.Timeout = 8000;
@@ -77,14 +72,14 @@ public class YouTubePlugin : IPlugin
         IRestResponse response = await client.ExecuteAsync(request);
 
         string videoId = ScrapeBit.FirstString(response.Content, "\\\"videoId\\\":\\\"", "\\\"");
-        if (videoId == null) return new LivestreamStatus(false, null);
-        else return new LivestreamStatus(true, videoId);
+        if (videoId == null) return new BasicStreamInfo(false, null);
+        else return new BasicStreamInfo(true, videoId);
     }
 }
 
-public class LivestreamStatus // Change to universal plugin format like trovo
+public class BasicStreamInfo // Change to universal plugin format like trovo
 {
-    public LivestreamStatus(bool IsLive, string VideoId)
+    public BasicStreamInfo(bool IsLive, string VideoId)
     {
         IsLivestreaming = IsLive;
         videoId = VideoId;
