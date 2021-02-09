@@ -13,6 +13,7 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
 {
     public string Name { get; set; }
     public TimeSpan Timeout { get; set; }
+    private string API_NAME = "Trovo API";
 
     public TrovoPluginGQL(string name, TimeSpan timeout)
     {
@@ -23,20 +24,20 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
     public async Task Run()
     {
         GetLiveInfo info = await GetInfoForSpecified();
-        if (info == null || info.ProgramInfo == null) return;
+        if (info == null || info.ProgramInfo == null) { CMessage.GotResponseNonExistentUser(Name, API_NAME); return; }
 
-        if (!info.IsLive) { CMessage.GotResponseFromTrovoGql(Name); return; }
+        if (!info.IsLive) { CMessage.GotResponseFromAPIStreamerOffline(Name, API_NAME); return; }
 
         string Title = info.ProgramInfo.Title.ToString(); // ToString, not tested, maybe converts \n \3c.. chars like that to proper chars. 
         string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{info.ProgramInfo.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
         string Description = info.StreamerInfo.Info.ToString();
 
         if (info.ProgramInfo.StreamInfo.Length < 1) return;
-        StreamInfo HighestQuality = info.ProgramInfo.StreamInfo[0];
+        StreamInfo HighestQuality = GetValidPlayUrl(info.ProgramInfo.StreamInfo);
         if (HighestQuality == null) return;
 
+        CMessage.LivestreamFound(Title, HighestQuality.Desc, Platform.Trovo);
 
-        ConsoleColor.Green.WriteLine($"Found Trovo Livestream with title {Title} and quality {HighestQuality.Desc}");
         await Download(HighestQuality.PlayUrl, Path);
 
         var Upload = new Youtube(FilePaths.SecretsFile);
@@ -57,6 +58,18 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
         }
         catch (Exception x) { CError.TrovoGqlJsonParseError(x); return null; }
     }
+    private StreamInfo GetValidPlayUrl(StreamInfo[] info)
+    {
+        foreach (StreamInfo strinfo in info)
+        {
+            if (strinfo.PlayUrl == null || strinfo.PlayUrl == string.Empty) continue;
+
+            else
+                return strinfo;
+        }
+        return null;
+    }
+
     public async Task RunInfinite()
     {
         while (true)
@@ -65,12 +78,11 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
             await Task.Delay(Timeout);
         }
     }
-    private async Task Download(Uri Url, string Path)
+    private async Task Download(string Url, string Path)
     {
         try { await new WebClient().DownloadFileTaskAsync(Url, Path); } catch (Exception x) { Console.WriteLine($"Exception Occured while Downloading Livestream: {x.Message}"); return; }
     }
 }
-
 
 
 public partial class TrovoGql
@@ -215,7 +227,7 @@ public partial class StreamInfo
     public long Bitrate { get; set; }
 
     [JsonProperty("playUrl")]
-    public Uri PlayUrl { get; set; }
+    public string PlayUrl { get; set; }
 
     [JsonProperty("desc")]
     public string Desc { get; set; }

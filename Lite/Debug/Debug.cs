@@ -44,14 +44,30 @@ public static class CMessage
     public static void InctanceStarted(Channel user, bool Async)
     {
         if (Async)
-            ConsoleColor.Green.WriteLine($"[ASYNC]Started thread for [{user.ChannelId}] delay {user.MinutesTimeOut} min Platform {user.Platform}");
+            ConsoleColor.DarkGreen.WriteLine($"[ASYNC]Started thread for [{user.ChannelId}] delay {user.MinutesTimeOut} min Platform {user.Platform}");
         else
-            ConsoleColor.Green.WriteLine($"[SYNC] Checking [{user.ChannelId}] delay {user.MinutesTimeOut} min Platform {user.Platform}");
+            ConsoleColor.DarkGreen.WriteLine($"[SYNC] Checking [{user.ChannelId}] delay {user.MinutesTimeOut} min Platform {user.Platform}");
+    }
+    public static void LivestreamFound(string Title, string Quality, Platform platform)
+    {
+        ConsoleColor.DarkGreen.WriteLine($"Found {platform} Livestream with title {Title} with quality {Quality}.");
+    }
+    public static void LivestreamFound(string Title, Platform platform)
+    {
+        ConsoleColor.DarkGreen.WriteLine($"Found {platform} Livestream with title {Title}.");
+    }
+    public static void GotResponseScheduledLivestream(string User, string API)
+    {
+        ConsoleColor.DarkGreen.WriteLine($"[{User}] Got response from {API}, livestream is Scheduled.");
     }
 
-    public static void GotResponseFromTrovoGql(string User)
+    public static void GotResponseFromAPIStreamerOffline(string User, string API)
     {
-        ConsoleColor.Green.WriteLine($"[{User}] Got response from TrovoGql Api streamer is Offline");
+        ConsoleColor.DarkGreen.WriteLine($"[{User}] Got response from {API}, streamer is Offline.");
+    }
+    public static void GotResponseNonExistentUser(string User, string API)
+    {
+        ConsoleColor.DarkYellow.WriteLine($"[{User}] Got response from {API}, streamer does not exist.");
     }
 
 }
