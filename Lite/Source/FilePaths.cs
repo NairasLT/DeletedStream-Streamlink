@@ -13,7 +13,7 @@ public class FilePaths
     private static string SecretsFolder = $"{Directory.GetCurrentDirectory()}\\Secrets\\";
     private static string ConfigFolder = $"{Directory.GetCurrentDirectory()}\\Config\\";
     public static string SecretsFileDefaultText = "Replace this file With your YouTube Api Oauth secrets file.";
-    public static string VersionFile = $"{Directory.GetCurrentDirectory()}\\Latest.json";
+    public static string VersionFile = $"{Directory.GetCurrentDirectory()}\\Latest.txt";
     public static string ConfigFile = $"{ConfigFolder}Config.json";
     public static string SecretsFile = $"{SecretsFolder}client_secrets.json";
     public static string ConfigExampleText = "Enter Here YouTube Channel Id Example: UCSIKKd_AkoV3c4F5CI4JAnQ";

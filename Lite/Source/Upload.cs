@@ -51,7 +51,7 @@ class Youtube
                     if (info.ThumbnailPath != null && File.Exists(info.ThumbnailPath))
                     {
                         await SetThumbnail(Video.Id, info.ThumbnailPath);
-                        Console.WriteLine($"UPLOADED VIDEO WITH ID {video.Id} TITLE: {info.Title} PATH: {info.LivestreamPath}");
+                        Console.WriteLine($"UPLOADED VIDEO WITH ID {Video.Id} TITLE: {info.Title} PATH: {info.LivestreamPath}");
                     }
                 };
                 await videosInsertRequest.UploadAsync();

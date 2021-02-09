@@ -12,14 +12,6 @@ class Update
 
     public UpdateInformation CurrentInformation { get; set; }
 
-    public Update()
-    {
-        try
-        {
-            CurrentInformation = new Config<UpdateInformation>(FilePaths.VersionFile).Read();
-        }
-        catch (Exception x) { CError.ErrorVersionFile(x); }
-    }
     
     public async Task Get()
     {
@@ -64,6 +56,23 @@ class Update
     }
 }
 
+
+public static class CurrentVersion
+{
+    public static string Title = "Test";
+    public static string Description = "desc";
+    public static double LatestVersion = 1.0;
+    public static Severity Severity = Severity.LOW;
+}
+public enum Severity
+{
+    CRITICAL,
+    HIGH,
+    NORMAL,
+    LOW,
+    VERYLOW,
+    NEEDED
+}
 
 public class UpdateInformation
 {

@@ -110,6 +110,11 @@
     <Compile Include="Helper\ScrapeBitRelated.cs" />
     <Compile Include="Plugins\Plugin.cs" />
     <Compile Include="Plugins\TrovoPluginGQL.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Source\ChannelGroup.cs" />
     <Compile Include="Source\FilePaths.cs" />
     <Compile Include="Source\models.cs" />
@@ -127,7 +132,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Latest.txt" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

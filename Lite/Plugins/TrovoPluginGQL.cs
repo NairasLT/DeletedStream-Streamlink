@@ -27,15 +27,16 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
 
         if (!info.IsLive) { CMessage.GotResponseFromTrovoGql(Name); return; }
 
+        string Title = info.ProgramInfo.Title.ToString(); // ToString, not tested, maybe converts \n \3c.. chars like that to proper chars. 
         string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{info.ProgramInfo.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
-        string Description = info.StreamerInfo.Info;
+        string Description = info.StreamerInfo.Info.ToString();
 
         if (info.ProgramInfo.StreamInfo.Length < 1) return;
         StreamInfo HighestQuality = info.ProgramInfo.StreamInfo[0];
         if (HighestQuality == null) return;
 
 
-        ConsoleColor.Green.WriteLine($"Found Trovo Livestream with title {info.ProgramInfo.Title} and quality {HighestQuality.Desc}");
+        ConsoleColor.Green.WriteLine($"Found Trovo Livestream with title {Title} and quality {HighestQuality.Desc}");
         await Download(HighestQuality.PlayUrl, Path);
 
         var Upload = new Youtube(FilePaths.SecretsFile);
@@ -66,8 +67,7 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
     }
     private async Task Download(Uri Url, string Path)
     {
-        var Web = new WebClient();
-        try { await Web.DownloadFileTaskAsync(Url, Path); } catch (Exception x) { Console.WriteLine($"Exception Occured while Downloading Livestream: {x.Message}"); return; }
+        try { await new WebClient().DownloadFileTaskAsync(Url, Path); } catch (Exception x) { Console.WriteLine($"Exception Occured while Downloading Livestream: {x.Message}"); return; }
     }
 }
 
