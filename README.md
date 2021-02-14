@@ -17,7 +17,7 @@
 #### Configuration
 
 ##### Channel Group Async Property: 
-###### if false if a streamer has same livestream on different platforms, when the streamer goes live the program will only download one livestream, if true the program will download both livestreams from the different platforms. In short if false starts 1 thread for the channel group if a livestream is found the thread will blocked. if true starts a thread for each platform.
+###### if false if a streamer has same livestream on different platforms, when the streamer goes live the program will only download one livestream, if true the program will download both livestreams from the different platforms. In short if false starts 1 thread for the channel group if a livestream is found the thread will be blocked. if true starts a thread for each platform.
 
 ##### ChannelGroup AsyncMinuteDelay Property:
 ###### Delay for checking if the streamer is live. Setting this number low may cause a rate limit.
