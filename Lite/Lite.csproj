@@ -116,6 +116,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Source\ChannelGroup.cs" />
+    <Compile Include="Source\Download.cs" />
     <Compile Include="Source\FilePaths.cs" />
     <Compile Include="Source\models.cs" />
     <Compile Include="Plugins\YouTubePlugin.cs" />

@@ -18,23 +18,28 @@ class TrovoPlugin : IPlugin
     internal Scrape DESCRIPTION = new Scrape("info:\"", "\"");
     public async Task<string> RequestCurrentStatus()
     {
-        var client = new RestClient($"https://trovo.live/{Name}");
-        client.Timeout = -1;
-        client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
-        var request = new RestRequest(Method.GET);
-        IRestResponse PageResponse = await client.ExecuteAsync(request);
+        try
+        {
+            var client = new RestClient($"https://trovo.live/{Name}");
+            client.Timeout = -1;
+            client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
+            var request = new RestRequest(Method.GET);
+            IRestResponse PageResponse = await client.ExecuteAsync(request);
 
-        if (PageResponse.Content == null)
-            return null;
+            if (PageResponse.Content == null)
+                return null;
 
-        string BoolText = ScrapeBit.FirstFrom(PageResponse.Content, ISLIVE);
-        if (BoolText == null)
-            return null;
+            string BoolText = ScrapeBit.FirstFrom(PageResponse.Content, ISLIVE);
+            if (BoolText == null)
+                return null;
 
-        bool status = bool.Parse(BoolText.ToLower());
+            bool status = bool.Parse(BoolText.ToLower());
 
-        if (status) return PageResponse.Content;
-        else return null;
+            if (status) return PageResponse.Content;
+            else return null;
+        }
+        catch (Exception) { return null; }
+
     }
     public async Task RunInfinite()
     {
@@ -72,7 +77,7 @@ class TrovoPlugin : IPlugin
 
         catch (Exception x) { Console.WriteLine($"Error in Check loop, Exception occurred: {x.Message}, please restart"); }
     }
-    private async Task Download(string Url, string Path)
+    internal async Task Download(string Url, string Path)
     {
         var Web = new WebClient();
         try { await Web.DownloadFileTaskAsync(new Uri(Url), Path); } catch (Exception x) { Console.WriteLine($"Exception Occured while Downloading Livestream: {x.Message}"); return; }

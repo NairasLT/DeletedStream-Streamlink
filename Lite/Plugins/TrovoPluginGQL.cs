@@ -23,37 +23,45 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
 
     public async Task Run()
     {
-        GetLiveInfo info = await GetInfoForSpecified();
-        if (info == null || info.ProgramInfo == null) { CMessage.GotResponseNonExistentUser(Name, API_NAME); return; }
+        try
+        {
+            GetLiveInfo info = await GetInfoForSpecified();
+            if (info == null || info.ProgramInfo == null) { CMessage.GotResponseNonExistentUser(Name, API_NAME); return; }
 
-        if (!info.IsLive) { CMessage.GotResponseFromAPIStreamerOffline(Name, API_NAME); return; }
+            if (!info.IsLive) { CMessage.GotResponseFromAPIStreamerOffline(Name, API_NAME); return; }
 
-        string Title = info.ProgramInfo.Title.ToString(); // ToString, not tested, maybe converts \n \3c.. chars like that to proper chars. 
-        string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{info.ProgramInfo.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
-        string Description = info.StreamerInfo.Info.ToString();
+            string Title = info.ProgramInfo.Title.ToString(); // ToString, not tested, maybe converts \n \3c.. chars like that to proper chars. 
+            string Path = FilePaths.GetLivestreamsPath(FileName.Purify($"{info.ProgramInfo.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"));
+            string Description = info.StreamerInfo.Info.ToString();
 
-        if (info.ProgramInfo.StreamInfo.Length < 1) return;
-        StreamInfo HighestQuality = GetValidPlayUrl(info.ProgramInfo.StreamInfo);
-        if (HighestQuality == null) return;
+            if (info.ProgramInfo.StreamInfo.Length < 1) return;
+            StreamInfo HighestQuality = GetValidPlayUrl(info.ProgramInfo.StreamInfo);
+            if (HighestQuality == null) return;
 
-        CMessage.LivestreamFound(Title, HighestQuality.Desc, Platform.Trovo);
+            CMessage.LivestreamFound(Title, HighestQuality.Desc, Platform.Trovo);
 
-        await Download(HighestQuality.PlayUrl, Path);
+            await Download(HighestQuality.PlayUrl, Path);
 
-        var Upload = new Youtube(FilePaths.SecretsFile);
-        await Upload.Init();
-        _ = Upload.UploadWithRetry(new YoutubeUpload() { LivestreamPath = Path, Title = info.ProgramInfo.Title, Description = Description, ThumbnailPath = null }, TimeSpan.FromHours(3));
+            var Upload = new Youtube(FilePaths.SecretsFile);
+            await Upload.Init();
+            _ = Upload.UploadWithRetry(new YoutubeUpload() { LivestreamPath = Path, Title = info.ProgramInfo.Title, Description = Description, ThumbnailPath = null }, TimeSpan.FromHours(3));
+        }
+        catch (Exception)
+        {
+            CError.ErrorInRunBlock(API_NAME);
+        }
+
     }
     private async Task<GetLiveInfo> GetInfoForSpecified()
     {
-        var client = new RestClient("https://gql.trovo.live/");
-        client.Timeout = -1;
-        var request = new RestRequest(Method.POST);
-        request.AddHeader("Content-Type", "application/json");
-        request.AddParameter("application/json", "[\r\n    {\r\n        \"operationName\": \"getLiveInfo\",\r\n        \"variables\": {\r\n            \"params\": {\r\n                \"userName\": \"" + Name + "\",\r\n                \"requireDecorations\": true\r\n            }\r\n        },\r\n        \"extensions\": {\r\n            \"persistedQuery\": {\r\n                \"version\": 1,\r\n                \"sha256Hash\": \"0fc70a5c9d328f1bdccd9516d309fffbc915dfd6e9283458fc8356e22ded97bc\"\r\n            },\r\n            \"url\": \"/" + Name + "\"\r\n        }\r\n    }\r\n]", ParameterType.RequestBody);
-        IRestResponse response = await client.ExecuteAsync(request);
         try
         {
+            var client = new RestClient("https://gql.trovo.live/");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddParameter("application/json", "[\r\n    {\r\n        \"operationName\": \"getLiveInfo\",\r\n        \"variables\": {\r\n            \"params\": {\r\n                \"userName\": \"" + Name + "\",\r\n                \"requireDecorations\": true\r\n            }\r\n        },\r\n        \"extensions\": {\r\n            \"persistedQuery\": {\r\n                \"version\": 1,\r\n                \"sha256Hash\": \"0fc70a5c9d328f1bdccd9516d309fffbc915dfd6e9283458fc8356e22ded97bc\"\r\n            },\r\n            \"url\": \"/" + Name + "\"\r\n        }\r\n    }\r\n]", ParameterType.RequestBody);
+            IRestResponse response = await client.ExecuteAsync(request);
             return TrovoGql.FromJson(response.Content)[0].Data.GetLiveInfo;
         }
         catch (Exception x) { CError.TrovoGqlJsonParseError(x); return null; }
@@ -78,7 +86,7 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
             await Task.Delay(Timeout);
         }
     }
-    private async Task Download(string Url, string Path)
+    private async Task Download(string Url, string Path) // make class and add timeout
     {
         try { await new WebClient().DownloadFileTaskAsync(Url, Path); } catch (Exception x) { Console.WriteLine($"Exception Occured while Downloading Livestream: {x.Message}"); return; }
     }

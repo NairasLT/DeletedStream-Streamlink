@@ -29,63 +29,79 @@ public class YouTubePlugin : IPlugin
 
     public async Task Run()
     {
-        var Status = await GetLivestreamStatusFromChannelId(ChannelId);
-
-        if (!Status.IsLivestreaming)
-            return;
-
-
-        var ytExplode = new YoutubeClient();
-        var metadata = await ytExplode.Videos.GetAsync(Status.videoId);
-
-        var UploadInformation = new YoutubeUpload()
-        {
-            Title = metadata.Title,
-            Description = metadata.Description,
-            ThumbnailPath = FilePaths.GetThumbnailPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].jpeg")),
-            LivestreamPath = FilePaths.GetLivestreamsPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"))
-        };
-
-        CMessage.LivestreamFound(metadata.Title, Platform.YouTube);
-
         try
-        { new WebClient().DownloadFile(metadata.Thumbnails.MaxResUrl, UploadInformation.ThumbnailPath); }
-        catch (Exception) { }
+        {
+            var Status = await GetLivestreamStatusFromChannelId(ChannelId);
 
-        await Streamlink.Download(UploadInformation.LivestreamPath, metadata.Url);
+            if (!Status.IsLivestreaming)
+                return;
 
-        var Upload = new Youtube(FilePaths.SecretsFile);
-        await Upload.Init();
-        _ = Upload.UploadWithRetry(UploadInformation, TimeSpan.FromHours(3));
+            var ytExplode = new YoutubeClient();
+            var metadata = await ytExplode.Videos.GetAsync(Status.videoId);
+
+            var UploadInformation = new YoutubeUpload()
+            {
+                Title = metadata.Title,
+                Description = metadata.Description,
+                ThumbnailPath = FilePaths.GetThumbnailPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].jpeg")),
+                LivestreamPath = FilePaths.GetLivestreamsPath(FileName.Purify($"{metadata.Title} [{DateTime.Now.Ticks.GetHashCode()}].mp4"))
+            };
+
+            CMessage.LivestreamFound(metadata.Title, Platform.YouTube);
+
+
+            try
+            { // Try in a try, because sometimes thumbnail downloads fails
+              // if not this try block it will not download the livestream and will not upload
+                new WebClient().DownloadFile(metadata.Thumbnails.MaxResUrl, UploadInformation.ThumbnailPath);
+            } 
+            catch (Exception) { }
+
+            await Streamlink.Download(UploadInformation.LivestreamPath, metadata.Url);
+
+            var Upload = new Youtube(FilePaths.SecretsFile);
+            await Upload.Init();
+            _ = Upload.UploadWithRetry(UploadInformation, TimeSpan.FromHours(3));
+        }
+        catch (Exception)
+        {
+            CError.ErrorInRunBlock(API_NAME);
+
+        }
 
     }
 
     public async Task<BasicStreamInfo> GetLivestreamStatusFromChannelId(string ChannelId)
     {
-        var client = new RestClient($"https://www.youtube.com/channel/{ChannelId}/live");
-        client.Timeout = 8000;
-        var request = new RestRequest(Method.GET);
-        request.AddHeader("Cookie", "PREF=cvdm=grid; VISITOR_INFO1_LIVE=a4lxAJu-9BU");
-        IRestResponse response = await client.ExecuteAsync(request);
 
-        if(response.StatusCode == HttpStatusCode.NotFound)
+        try
         {
-            CMessage.GotResponseNonExistentUser(ChannelId, API_NAME);
-            return BasicStreamInfo.Empty;
-        }
+            var client = new RestClient($"https://www.youtube.com/channel/{ChannelId}/live");
+            client.Timeout = 8000;
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Cookie", "PREF=cvdm=grid; VISITOR_INFO1_LIVE=a4lxAJu-9BU");
+            IRestResponse response = await client.ExecuteAsync(request);
 
-        string videoId = ScrapeBit.FirstString(response.Content, "\"videoDetails\":{\"videoId\":\"", "\"");
-        if (videoId == null) {
-            return BasicStreamInfo.Empty;
-        }
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                CMessage.GotResponseNonExistentUser(ChannelId, API_NAME);
+                return BasicStreamInfo.Empty;
+            }
 
-        if (response.Content.Contains("LIVE_STREAM_OFFLINE"))
-        {
-            CMessage.GotResponseScheduledLivestream(ChannelId, API_NAME);
-            return BasicStreamInfo.Empty;
-        }
-        else return new BasicStreamInfo(true, videoId);
+            string videoId = ScrapeBit.FirstString(response.Content, "\"videoDetails\":{\"videoId\":\"", "\"");
+            if (videoId == null)
+            {
+                return BasicStreamInfo.Empty;
+            }
 
+            if (response.Content.Contains("LIVE_STREAM_OFFLINE"))
+            {
+                CMessage.GotResponseScheduledLivestream(ChannelId, API_NAME);
+                return BasicStreamInfo.Empty;
+            }
+            else return new BasicStreamInfo(true, videoId);
+        }
+        catch (Exception) { return BasicStreamInfo.Empty; }
     }
 }
 

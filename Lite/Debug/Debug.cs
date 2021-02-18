@@ -12,6 +12,12 @@ public static class ConsoleExtension
 public static class CError
 {
 
+    public static void ErrorInRunBlock(string API)
+    {
+        ConsoleColor.Red.WriteLine($"Exception occurred in {API} Run() function");
+    }
+
+
     public static void ErrorExampleObjectFound()
     {
         ConsoleColor.Red.WriteLine("Please configure the config file correctly. And remove the example Object");
