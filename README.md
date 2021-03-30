@@ -22,3 +22,27 @@
 ##### ChannelGroup AsyncMinuteDelay Property:
 ###### Delay for checking if the streamer is live. Setting this number low may cause a rate limit.
 
+#### Example Config
+```
+{
+  "ChannelGroups": [
+    {
+      "Channels": [
+        {
+          "ChannelId": "PewDiePie",
+          "MinutesTimeOut": 6, // Used in multithreaded mode.
+          "Platform": 1 // Platform Trovo
+        },
+        {
+          "ChannelId": "UC-lHJZR3Gqxm24_Vd_AJ5Yw",
+          "MinutesTimeOut": 6, // ignored if running on Singlethread uses AsyncMinuteDelay.
+          "Platform": 0 // Platform youtube
+        }
+      ],
+      "Async": false, // Singlethreaded
+      "AsyncMinuteDelay": 6 // Singlethreaded mode checking delay
+    }
+  ]
+}
+```
+
