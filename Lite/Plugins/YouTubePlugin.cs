@@ -80,7 +80,7 @@ public class YouTubePlugin : IPlugin
             var client = new RestClient($"https://www.youtube.com/channel/{ChannelId}/live");
             client.Timeout = 8000;
             var request = new RestRequest(Method.GET);
-            request.AddCookie("CONSENT", "YES+GB.en-GB+V9+BX");
+            request.AddCookie("CONSENT", "YES+cb");
             IRestResponse response = await client.ExecuteAsync(request);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
