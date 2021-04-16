@@ -1,6 +1,7 @@
 ﻿using RestSharp;
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using YoutubeExplode;
 
@@ -63,9 +64,9 @@ public class YouTubePlugin : IPlugin
             await Upload.Init();
             _ = Upload.UploadWithRetry(UploadInformation, TimeSpan.FromHours(3));
         }
-        catch (Exception)
+        catch (Exception x)
         {
-            CError.ErrorInRunBlock(API_NAME);
+            CError.ErrorInRunBlock(API_NAME, x.Message);
 
         }
 
@@ -79,7 +80,7 @@ public class YouTubePlugin : IPlugin
             var client = new RestClient($"https://www.youtube.com/channel/{ChannelId}/live");
             client.Timeout = 8000;
             var request = new RestRequest(Method.GET);
-            request.AddHeader("Cookie", "PREF=cvdm=grid; VISITOR_INFO1_LIVE=a4lxAJu-9BU");
+            request.AddCookie("CONSENT", "YES+GB.en-GB+V9+BX");
             IRestResponse response = await client.ExecuteAsync(request);
 
             if (response.StatusCode == HttpStatusCode.NotFound)

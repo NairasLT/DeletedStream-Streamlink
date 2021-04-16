@@ -147,3 +147,4 @@ C:\Users\Nojus\Desktop\JS\YouTube-Livestream-Archiver\Lite\obj\Release\Lite.exe
 C:\Users\Nojus\Desktop\JS\YouTube-Livestream-Archiver\Lite\obj\Release\Lite.pdb
 C:\Users\Nojus\Desktop\JS\YouTube-Livestream-Archiver\Lite\obj\Release\Lite.Properties.Resources.resources
 C:\Users\Nojus\Desktop\JS\YouTube-Livestream-Archiver\Lite\obj\Release\Lite.csproj.GenerateResource.cache
+C:\Users\Nojus\Desktop\JS\YouTube-Livestream-Archiver\Lite\bin\Release\System.Text.Encoding.CodePages.xml

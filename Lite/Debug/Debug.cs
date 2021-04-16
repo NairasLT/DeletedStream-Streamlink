@@ -17,6 +17,10 @@ public static class CError
         ConsoleColor.Red.WriteLine($"Exception occurred in {API} Run() function");
     }
 
+    public static void ErrorInRunBlock(string API, string message)
+    {
+        ConsoleColor.Red.WriteLine($"Exception occurred in {API} Run() function, exception: {message}");
+    }
 
     public static void ErrorExampleObjectFound()
     {
