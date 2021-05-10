@@ -12,7 +12,6 @@ public class YouTubePlugin : IPlugin
         ChannelId = channelId;
         Timeout = timeOut;
     }
-
     public string ChannelId { get; set; }
     public TimeSpan Timeout { get; set; }
 

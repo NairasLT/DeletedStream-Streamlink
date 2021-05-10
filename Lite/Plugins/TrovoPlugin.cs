@@ -10,12 +10,15 @@ class TrovoPlugin : IPlugin
         Name = name;
         Timeout = delay;
     }
+
     public string Name { get; set; }
     public TimeSpan Timeout { get; set; }
 
     internal Scrape ISLIVE = new Scrape("\"isLive\":", ",");
     internal Scrape TITLE = new Scrape("property=\"og:description\" content=\"", "\"");
     internal Scrape DESCRIPTION = new Scrape("info:\"", "\"");
+
+
     public async Task<string> RequestCurrentStatus()
     {
         try
@@ -49,6 +52,7 @@ class TrovoPlugin : IPlugin
             await Task.Delay(Timeout);
         }
     }
+
     public async Task Run()
     {
         try

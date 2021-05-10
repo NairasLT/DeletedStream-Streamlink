@@ -26,9 +26,9 @@ public class Startup
         foreach (var group in Filecontent.ChannelGroups)
         {
             if (group.Async)
-                ChannelGroup.AsynchronousInfiniteStart(group); // Starts thread for all group channels
+                PluginHandler.Async(group); // Starts thread for all group channels
             else
-                _ = ChannelGroup.SynchronousInfinite(group); // Creates 1 thread for all group channels
+                _ = PluginHandler.Sync(group); // Creates 1 thread for all group channels
         }
 
     }

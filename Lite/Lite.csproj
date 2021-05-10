@@ -107,7 +107,6 @@
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
     <Compile Include="Helper\Config.cs" />
-    <Compile Include="Helper\ScrapeBitRelated.cs" />
     <Compile Include="Plugins\Plugin.cs" />
     <Compile Include="Plugins\TrovoPluginGQL.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -125,6 +124,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\Streamlink.cs" />
+    <Compile Include="Source\PluginHandler.cs" />
     <Compile Include="Source\Upload.cs" />
     <Compile Include="Update\Update.cs" />
   </ItemGroup>

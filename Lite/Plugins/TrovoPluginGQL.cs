@@ -14,7 +14,6 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
     public string Name { get; set; }
     public TimeSpan Timeout { get; set; }
     private string API_NAME = "Trovo API";
-
     public TrovoPluginGQL(string name, TimeSpan timeout)
     {
         Name = name;
@@ -90,6 +89,7 @@ class TrovoPluginGQL : IPlugin // Soon to be implmented using thier GraphQl Api.
     {
         try { await new WebClient().DownloadFileTaskAsync(Url, Path); } catch (Exception x) { Console.WriteLine($"Exception Occured while Downloading Livestream: {x.Message}"); return; }
     }
+
 }
 
 
@@ -98,13 +98,11 @@ public partial class TrovoGql
     [JsonProperty("data")]
     public Data Data { get; set; }
 }
-
 public partial class Data
 {
     [JsonProperty("getLiveInfo")]
     public GetLiveInfo GetLiveInfo { get; set; }
 }
-
 public partial class GetLiveInfo
 {
     [JsonProperty("streamerInfo")]
@@ -140,7 +138,6 @@ public partial class GetLiveInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class CategoryInfo
 {
     [JsonProperty("id")]
@@ -159,7 +156,6 @@ public partial class CategoryInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class ChannelControlInfo
 {
     [JsonProperty("notifyStreamerToChangeChannelInfo")]
@@ -168,7 +164,6 @@ public partial class ChannelControlInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class ChannelInfo
 {
     [JsonProperty("id")]
@@ -189,7 +184,6 @@ public partial class ChannelInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class ProgramInfo
 {
     [JsonProperty("id")]
@@ -228,7 +222,6 @@ public partial class ProgramInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class StreamInfo
 {
     [JsonProperty("bitrate")]
@@ -258,7 +251,6 @@ public partial class StreamInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class StreamerInfo
 {
     [JsonProperty("uid")]
@@ -288,7 +280,6 @@ public partial class StreamerInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class SocialLinks
 {
     [JsonProperty("instagram")]
@@ -309,7 +300,6 @@ public partial class SocialLinks
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class StreamerPrivilegeInfo
 {
     [JsonProperty("StreamerBadgeInfos")]
@@ -318,7 +308,6 @@ public partial class StreamerPrivilegeInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class StreamerBadgeInfo
 {
     [JsonProperty("streamerBadge")]
@@ -333,17 +322,14 @@ public partial class StreamerBadgeInfo
     [JsonProperty("__typename")]
     public string Typename { get; set; }
 }
-
 public partial class TrovoGql
 {
     public static TrovoGql[] FromJson(string json) => JsonConvert.DeserializeObject<TrovoGql[]>(json, Converter.Settings);
 }
-
 public static class Serialize
 {
     public static string ToJson(this TrovoGql[] self) => JsonConvert.SerializeObject(self, Converter.Settings);
 }
-
 internal static class Converter
 {
     public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
@@ -356,7 +342,6 @@ internal static class Converter
             },
     };
 }
-
 internal class ParseStringConverter : JsonConverter
 {
     public override bool CanConvert(Type t) => t == typeof(long) || t == typeof(long?);
